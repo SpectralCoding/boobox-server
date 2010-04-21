@@ -2,6 +2,9 @@
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BooBoxServer", "BooBoxServer.csproj", "{2FFC84D3-B364-484B-9CE3-F032CC3E908A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{89FA7319-D94A-4850-897D-636FCD63F1A5} = {89FA7319-D94A-4850-897D-636FCD63F1A5}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BooBox", "..\BooBoxLib\BooBox.csproj", "{89FA7319-D94A-4850-897D-636FCD63F1A5}"
 EndProject
