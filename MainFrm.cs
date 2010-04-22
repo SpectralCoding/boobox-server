@@ -12,5 +12,10 @@ namespace BooBoxServer {
 		public MainFrm() {
 			InitializeComponent();
 		}
+
+		private void AboutMenuItem_Click(object sender, EventArgs e) {
+			AboutFrm AboutFrm = new AboutFrm();
+			AboutFrm.Show();
+		}
 	}
 }

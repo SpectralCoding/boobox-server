@@ -5,13 +5,13 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("BooBoxServer")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("BooBox Server")]
+[assembly: AssemblyDescription("Repeatedly violating our Copyright will bring the full extent of the law, which may ultimately result in permanent imprisonment at hard labor, and/or death by extreme slow torture, and/or lethal experimental medical therapies.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Microsoft")]
-[assembly: AssemblyProduct("BooBoxServer")]
-[assembly: AssemblyCopyright("Copyright © Microsoft 2010")]
-[assembly: AssemblyTrademark("")]
+[assembly: AssemblyCompany("SpectralCoding")]
+[assembly: AssemblyProduct("BooBox Server")]
+[assembly: AssemblyCopyright("Copyright© 2010")]
+[assembly: AssemblyTrademark("All Rights Reserved")]
 [assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
