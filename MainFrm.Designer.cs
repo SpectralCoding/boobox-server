@@ -1,5 +1,5 @@
 ﻿namespace BooBoxServer {
-	partial class Form1 {
+	partial class MainFrm {
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
