@@ -56,6 +56,16 @@
 			this.RemoveFolderFromLibraryMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.RebuildLibraryMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripSeparator();
+			this.dataBufferSizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.bytesToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+			this.bytesToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+			this.bytesToolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
+			this.bytesrecommendedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.bytesToolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
+			this.changeServerNameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.changeListeningPortToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.changeServerPasswordToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.enableServerPasswordToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.MenuStrip.SuspendLayout();
 			this.StatusStrip.SuspendLayout();
 			this.LibraryGrp.SuspendLayout();
@@ -130,6 +140,12 @@
 			// 
 			// OptionsHeaderMenu
 			// 
+			this.OptionsHeaderMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.dataBufferSizeToolStripMenuItem,
+            this.changeServerNameToolStripMenuItem,
+            this.changeListeningPortToolStripMenuItem,
+            this.changeServerPasswordToolStripMenuItem,
+            this.enableServerPasswordToolStripMenuItem});
 			this.OptionsHeaderMenu.Name = "OptionsHeaderMenu";
 			this.OptionsHeaderMenu.Size = new System.Drawing.Size(61, 20);
 			this.OptionsHeaderMenu.Text = "&Options";
@@ -183,8 +199,8 @@
 			// ProgressBarLblStatusStrip
 			// 
 			this.ProgressBarLblStatusStrip.Name = "ProgressBarLblStatusStrip";
-			this.ProgressBarLblStatusStrip.Size = new System.Drawing.Size(39, 17);
-			this.ProgressBarLblStatusStrip.Text = "Ready";
+			this.ProgressBarLblStatusStrip.Size = new System.Drawing.Size(160, 17);
+			this.ProgressBarLblStatusStrip.Text = "Ready. (# Clients Connected)";
 			// 
 			// LibraryGrp
 			// 
@@ -332,6 +348,72 @@
 			this.toolStripMenuItem4.Name = "toolStripMenuItem4";
 			this.toolStripMenuItem4.Size = new System.Drawing.Size(224, 6);
 			// 
+			// dataBufferSizeToolStripMenuItem
+			// 
+			this.dataBufferSizeToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.bytesToolStripMenuItem1,
+            this.bytesToolStripMenuItem2,
+            this.bytesToolStripMenuItem3,
+            this.bytesrecommendedToolStripMenuItem,
+            this.bytesToolStripMenuItem4});
+			this.dataBufferSizeToolStripMenuItem.Name = "dataBufferSizeToolStripMenuItem";
+			this.dataBufferSizeToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+			this.dataBufferSizeToolStripMenuItem.Text = "Data Buffer Size";
+			// 
+			// bytesToolStripMenuItem1
+			// 
+			this.bytesToolStripMenuItem1.Name = "bytesToolStripMenuItem1";
+			this.bytesToolStripMenuItem1.Size = new System.Drawing.Size(221, 22);
+			this.bytesToolStripMenuItem1.Text = "512 Bytes";
+			// 
+			// bytesToolStripMenuItem2
+			// 
+			this.bytesToolStripMenuItem2.Name = "bytesToolStripMenuItem2";
+			this.bytesToolStripMenuItem2.Size = new System.Drawing.Size(221, 22);
+			this.bytesToolStripMenuItem2.Text = "1024 Bytes";
+			// 
+			// bytesToolStripMenuItem3
+			// 
+			this.bytesToolStripMenuItem3.Name = "bytesToolStripMenuItem3";
+			this.bytesToolStripMenuItem3.Size = new System.Drawing.Size(221, 22);
+			this.bytesToolStripMenuItem3.Text = "2048 Bytes";
+			// 
+			// bytesrecommendedToolStripMenuItem
+			// 
+			this.bytesrecommendedToolStripMenuItem.Name = "bytesrecommendedToolStripMenuItem";
+			this.bytesrecommendedToolStripMenuItem.Size = new System.Drawing.Size(221, 22);
+			this.bytesrecommendedToolStripMenuItem.Text = "4096 Bytes (Recommended)";
+			// 
+			// bytesToolStripMenuItem4
+			// 
+			this.bytesToolStripMenuItem4.Name = "bytesToolStripMenuItem4";
+			this.bytesToolStripMenuItem4.Size = new System.Drawing.Size(221, 22);
+			this.bytesToolStripMenuItem4.Text = "8192 Bytes";
+			// 
+			// changeServerNameToolStripMenuItem
+			// 
+			this.changeServerNameToolStripMenuItem.Name = "changeServerNameToolStripMenuItem";
+			this.changeServerNameToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
+			this.changeServerNameToolStripMenuItem.Text = "Change Server Name";
+			// 
+			// changeListeningPortToolStripMenuItem
+			// 
+			this.changeListeningPortToolStripMenuItem.Name = "changeListeningPortToolStripMenuItem";
+			this.changeListeningPortToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
+			this.changeListeningPortToolStripMenuItem.Text = "Change Listening Ports";
+			// 
+			// changeServerPasswordToolStripMenuItem
+			// 
+			this.changeServerPasswordToolStripMenuItem.Name = "changeServerPasswordToolStripMenuItem";
+			this.changeServerPasswordToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
+			this.changeServerPasswordToolStripMenuItem.Text = "Change Server Password";
+			// 
+			// enableServerPasswordToolStripMenuItem
+			// 
+			this.enableServerPasswordToolStripMenuItem.Name = "enableServerPasswordToolStripMenuItem";
+			this.enableServerPasswordToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
+			this.enableServerPasswordToolStripMenuItem.Text = "Enable Server Password";
+			// 
 			// MainFrm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -399,6 +481,16 @@
 		private System.Windows.Forms.ToolStripMenuItem RemoveFolderFromLibraryMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem RebuildLibraryMenuItem;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem4;
+		private System.Windows.Forms.ToolStripMenuItem dataBufferSizeToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem bytesToolStripMenuItem1;
+		private System.Windows.Forms.ToolStripMenuItem bytesToolStripMenuItem2;
+		private System.Windows.Forms.ToolStripMenuItem bytesToolStripMenuItem3;
+		private System.Windows.Forms.ToolStripMenuItem bytesrecommendedToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem bytesToolStripMenuItem4;
+		private System.Windows.Forms.ToolStripMenuItem changeServerNameToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem changeListeningPortToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem changeServerPasswordToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem enableServerPasswordToolStripMenuItem;
 	}
 }
 
