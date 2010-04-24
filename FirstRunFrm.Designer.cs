@@ -29,6 +29,7 @@
 			this.NextCmd = new System.Windows.Forms.Button();
 			this.BackCmd = new System.Windows.Forms.Button();
 			this.DescriptionLbl = new System.Windows.Forms.Label();
+			this.InputTxt = new System.Windows.Forms.TextBox();
 			((System.ComponentModel.ISupportInitialize)(this.LogoPicBox)).BeginInit();
 			this.SuspendLayout();
 			// 
@@ -66,15 +67,18 @@
 			this.NextCmd.TabIndex = 3;
 			this.NextCmd.Text = "Next >";
 			this.NextCmd.UseVisualStyleBackColor = true;
+			this.NextCmd.Click += new System.EventHandler(this.NextCmd_Click);
 			// 
 			// BackCmd
 			// 
+			this.BackCmd.Enabled = false;
 			this.BackCmd.Location = new System.Drawing.Point(316, 327);
 			this.BackCmd.Name = "BackCmd";
 			this.BackCmd.Size = new System.Drawing.Size(75, 23);
 			this.BackCmd.TabIndex = 4;
 			this.BackCmd.Text = "< Back";
 			this.BackCmd.UseVisualStyleBackColor = true;
+			this.BackCmd.Click += new System.EventHandler(this.BackCmd_Click);
 			// 
 			// DescriptionLbl
 			// 
@@ -84,21 +88,32 @@
 			this.DescriptionLbl.TabIndex = 5;
 			this.DescriptionLbl.Text = "Description";
 			// 
-			// FirstRun
+			// InputTxt
+			// 
+			this.InputTxt.Location = new System.Drawing.Point(154, 215);
+			this.InputTxt.Name = "InputTxt";
+			this.InputTxt.Size = new System.Drawing.Size(318, 20);
+			this.InputTxt.TabIndex = 6;
+			this.InputTxt.Visible = false;
+			// 
+			// FirstRunFrm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(484, 362);
+			this.Controls.Add(this.InputTxt);
 			this.Controls.Add(this.DescriptionLbl);
 			this.Controls.Add(this.BackCmd);
 			this.Controls.Add(this.NextCmd);
 			this.Controls.Add(this.TitleLbl);
 			this.Controls.Add(this.LineLbl);
 			this.Controls.Add(this.LogoPicBox);
-			this.Name = "FirstRun";
+			this.Name = "FirstRunFrm";
 			this.Text = "BooBox Server : First Run Wizard";
+			this.Load += new System.EventHandler(this.FirstRunFrm_Load);
 			((System.ComponentModel.ISupportInitialize)(this.LogoPicBox)).EndInit();
 			this.ResumeLayout(false);
+			this.PerformLayout();
 
 		}
 
@@ -110,5 +125,6 @@
 		private System.Windows.Forms.Button NextCmd;
 		private System.Windows.Forms.Button BackCmd;
 		private System.Windows.Forms.Label DescriptionLbl;
+		private System.Windows.Forms.TextBox InputTxt;
 	}
 }
