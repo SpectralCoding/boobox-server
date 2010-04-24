@@ -29,7 +29,9 @@
 			this.NextCmd = new System.Windows.Forms.Button();
 			this.BackCmd = new System.Windows.Forms.Button();
 			this.DescriptionLbl = new System.Windows.Forms.Label();
-			this.InputTxt = new System.Windows.Forms.TextBox();
+			this.InputOneTxt = new System.Windows.Forms.TextBox();
+			this.InputTwoTxt = new System.Windows.Forms.TextBox();
+			this.CheckBox = new System.Windows.Forms.CheckBox();
 			((System.ComponentModel.ISupportInitialize)(this.LogoPicBox)).BeginInit();
 			this.SuspendLayout();
 			// 
@@ -88,20 +90,42 @@
 			this.DescriptionLbl.TabIndex = 5;
 			this.DescriptionLbl.Text = "Description";
 			// 
-			// InputTxt
+			// InputOneTxt
 			// 
-			this.InputTxt.Location = new System.Drawing.Point(154, 215);
-			this.InputTxt.Name = "InputTxt";
-			this.InputTxt.Size = new System.Drawing.Size(318, 20);
-			this.InputTxt.TabIndex = 6;
-			this.InputTxt.Visible = false;
+			this.InputOneTxt.Location = new System.Drawing.Point(154, 175);
+			this.InputOneTxt.Name = "InputOneTxt";
+			this.InputOneTxt.Size = new System.Drawing.Size(318, 20);
+			this.InputOneTxt.TabIndex = 6;
+			this.InputOneTxt.Visible = false;
+			// 
+			// InputTwoTxt
+			// 
+			this.InputTwoTxt.Location = new System.Drawing.Point(154, 201);
+			this.InputTwoTxt.Name = "InputTwoTxt";
+			this.InputTwoTxt.Size = new System.Drawing.Size(318, 20);
+			this.InputTwoTxt.TabIndex = 7;
+			this.InputTwoTxt.Visible = false;
+			// 
+			// CheckBox
+			// 
+			this.CheckBox.AutoSize = true;
+			this.CheckBox.Location = new System.Drawing.Point(154, 227);
+			this.CheckBox.Name = "CheckBox";
+			this.CheckBox.Size = new System.Drawing.Size(142, 17);
+			this.CheckBox.TabIndex = 8;
+			this.CheckBox.Text = "Enable Server Password";
+			this.CheckBox.UseVisualStyleBackColor = true;
+			this.CheckBox.Visible = false;
+			this.CheckBox.CheckedChanged += new System.EventHandler(this.CheckBox_CheckedChanged);
 			// 
 			// FirstRunFrm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(484, 362);
-			this.Controls.Add(this.InputTxt);
+			this.Controls.Add(this.CheckBox);
+			this.Controls.Add(this.InputTwoTxt);
+			this.Controls.Add(this.InputOneTxt);
 			this.Controls.Add(this.DescriptionLbl);
 			this.Controls.Add(this.BackCmd);
 			this.Controls.Add(this.NextCmd);
@@ -125,6 +149,8 @@
 		private System.Windows.Forms.Button NextCmd;
 		private System.Windows.Forms.Button BackCmd;
 		private System.Windows.Forms.Label DescriptionLbl;
-		private System.Windows.Forms.TextBox InputTxt;
+		private System.Windows.Forms.TextBox InputOneTxt;
+		private System.Windows.Forms.TextBox InputTwoTxt;
+		private System.Windows.Forms.CheckBox CheckBox;
 	}
 }

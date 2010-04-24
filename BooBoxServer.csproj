@@ -52,6 +52,7 @@
     <Compile Include="AboutFrm.Designer.cs">
       <DependentUpon>AboutFrm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Config.cs" />
     <Compile Include="FirstRunFrm.cs">
       <SubType>Form</SubType>
     </Compile>
