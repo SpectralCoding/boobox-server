@@ -64,5 +64,10 @@ namespace BooBoxServer {
 			ToBottomCmd.Top = DownCmd.Top + DownCmd.Height + 6;
 			#endregion
 		}
+
+		private void DebugCmd_Click(object sender, EventArgs e) {
+			FirstRunFrm FirstRunFrm = new FirstRunFrm();
+			FirstRunFrm.Show();
+		}
 	}
 }
