@@ -44,8 +44,9 @@
 			this.Bytes8192MenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.ChangeServerNameMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.ChangeListeningPortsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.ChangeServerPasswordMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
 			this.ToggleServerPasswordMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.ChangeServerPasswordMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.HelpMenuHeader = new System.Windows.Forms.ToolStripMenuItem();
 			this.HelpMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
@@ -66,7 +67,6 @@
 			this.AddToPlaylistCmd = new System.Windows.Forms.Button();
 			this.DeletePlaylistCmd = new System.Windows.Forms.Button();
 			this.NewPlaylistCmd = new System.Windows.Forms.Button();
-			this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
 			this.MenuStrip.SuspendLayout();
 			this.StatusStrip.SuspendLayout();
 			this.LibraryGrp.SuspendLayout();
@@ -231,17 +231,22 @@
 			this.ChangeListeningPortsMenuItem.Size = new System.Drawing.Size(203, 22);
 			this.ChangeListeningPortsMenuItem.Text = "Change Listening Ports";
 			// 
-			// ChangeServerPasswordMenuItem
+			// toolStripMenuItem5
 			// 
-			this.ChangeServerPasswordMenuItem.Name = "ChangeServerPasswordMenuItem";
-			this.ChangeServerPasswordMenuItem.Size = new System.Drawing.Size(203, 22);
-			this.ChangeServerPasswordMenuItem.Text = "Change Server Password";
+			this.toolStripMenuItem5.Name = "toolStripMenuItem5";
+			this.toolStripMenuItem5.Size = new System.Drawing.Size(200, 6);
 			// 
 			// ToggleServerPasswordMenuItem
 			// 
 			this.ToggleServerPasswordMenuItem.Name = "ToggleServerPasswordMenuItem";
 			this.ToggleServerPasswordMenuItem.Size = new System.Drawing.Size(203, 22);
 			this.ToggleServerPasswordMenuItem.Text = "Enable Server Password";
+			// 
+			// ChangeServerPasswordMenuItem
+			// 
+			this.ChangeServerPasswordMenuItem.Name = "ChangeServerPasswordMenuItem";
+			this.ChangeServerPasswordMenuItem.Size = new System.Drawing.Size(203, 22);
+			this.ChangeServerPasswordMenuItem.Text = "Change Server Password";
 			// 
 			// HelpMenuHeader
 			// 
@@ -257,18 +262,18 @@
 			// 
 			this.HelpMenuItem.Name = "HelpMenuItem";
 			this.HelpMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F1;
-			this.HelpMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.HelpMenuItem.Size = new System.Drawing.Size(118, 22);
 			this.HelpMenuItem.Text = "&Help";
 			// 
 			// toolStripMenuItem1
 			// 
 			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-			this.toolStripMenuItem1.Size = new System.Drawing.Size(149, 6);
+			this.toolStripMenuItem1.Size = new System.Drawing.Size(115, 6);
 			// 
 			// AboutMenuItem
 			// 
 			this.AboutMenuItem.Name = "AboutMenuItem";
-			this.AboutMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.AboutMenuItem.Size = new System.Drawing.Size(118, 22);
 			this.AboutMenuItem.Text = "&About";
 			this.AboutMenuItem.Click += new System.EventHandler(this.AboutMenuItem_Click);
 			// 
@@ -297,6 +302,8 @@
 			// 
 			// LibraryGrp
 			// 
+			this.LibraryGrp.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+						| System.Windows.Forms.AnchorStyles.Right)));
 			this.LibraryGrp.Controls.Add(this.LibraryDGV);
 			this.LibraryGrp.Location = new System.Drawing.Point(6, 27);
 			this.LibraryGrp.Name = "LibraryGrp";
@@ -307,6 +314,9 @@
 			// 
 			// LibraryDGV
 			// 
+			this.LibraryDGV.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+						| System.Windows.Forms.AnchorStyles.Left)
+						| System.Windows.Forms.AnchorStyles.Right)));
 			this.LibraryDGV.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			this.LibraryDGV.Location = new System.Drawing.Point(6, 19);
 			this.LibraryDGV.Name = "LibraryDGV";
@@ -315,6 +325,8 @@
 			// 
 			// PlaylistGrp
 			// 
+			this.PlaylistGrp.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+						| System.Windows.Forms.AnchorStyles.Right)));
 			this.PlaylistGrp.Controls.Add(this.DelCmd);
 			this.PlaylistGrp.Controls.Add(this.ToBottomCmd);
 			this.PlaylistGrp.Controls.Add(this.DownCmd);
@@ -330,6 +342,7 @@
 			// 
 			// DelCmd
 			// 
+			this.DelCmd.Anchor = System.Windows.Forms.AnchorStyles.Right;
 			this.DelCmd.Location = new System.Drawing.Point(660, 123);
 			this.DelCmd.Name = "DelCmd";
 			this.DelCmd.Size = new System.Drawing.Size(33, 33);
@@ -339,6 +352,7 @@
 			// 
 			// ToBottomCmd
 			// 
+			this.ToBottomCmd.Anchor = System.Windows.Forms.AnchorStyles.Right;
 			this.ToBottomCmd.Location = new System.Drawing.Point(660, 214);
 			this.ToBottomCmd.Name = "ToBottomCmd";
 			this.ToBottomCmd.Size = new System.Drawing.Size(33, 46);
@@ -348,6 +362,7 @@
 			// 
 			// DownCmd
 			// 
+			this.DownCmd.Anchor = System.Windows.Forms.AnchorStyles.Right;
 			this.DownCmd.Location = new System.Drawing.Point(660, 162);
 			this.DownCmd.Name = "DownCmd";
 			this.DownCmd.Size = new System.Drawing.Size(33, 46);
@@ -357,6 +372,7 @@
 			// 
 			// UpCmd
 			// 
+			this.UpCmd.Anchor = System.Windows.Forms.AnchorStyles.Right;
 			this.UpCmd.Location = new System.Drawing.Point(660, 71);
 			this.UpCmd.Name = "UpCmd";
 			this.UpCmd.Size = new System.Drawing.Size(33, 46);
@@ -366,6 +382,7 @@
 			// 
 			// ToTopCmd
 			// 
+			this.ToTopCmd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.ToTopCmd.Location = new System.Drawing.Point(660, 19);
 			this.ToTopCmd.Name = "ToTopCmd";
 			this.ToTopCmd.Size = new System.Drawing.Size(33, 46);
@@ -375,6 +392,9 @@
 			// 
 			// PlaylistDGV
 			// 
+			this.PlaylistDGV.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+						| System.Windows.Forms.AnchorStyles.Left)
+						| System.Windows.Forms.AnchorStyles.Right)));
 			this.PlaylistDGV.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			this.PlaylistDGV.Location = new System.Drawing.Point(6, 19);
 			this.PlaylistDGV.Name = "PlaylistDGV";
@@ -383,6 +403,8 @@
 			// 
 			// PlaylistComb
 			// 
+			this.PlaylistComb.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+						| System.Windows.Forms.AnchorStyles.Right)));
 			this.PlaylistComb.FormattingEnabled = true;
 			this.PlaylistComb.Location = new System.Drawing.Point(12, 286);
 			this.PlaylistComb.Name = "PlaylistComb";
@@ -391,6 +413,7 @@
 			// 
 			// AddToPlaylistCmd
 			// 
+			this.AddToPlaylistCmd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.AddToPlaylistCmd.Location = new System.Drawing.Point(438, 284);
 			this.AddToPlaylistCmd.Name = "AddToPlaylistCmd";
 			this.AddToPlaylistCmd.Size = new System.Drawing.Size(85, 23);
@@ -400,6 +423,7 @@
 			// 
 			// DeletePlaylistCmd
 			// 
+			this.DeletePlaylistCmd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.DeletePlaylistCmd.Location = new System.Drawing.Point(529, 284);
 			this.DeletePlaylistCmd.Name = "DeletePlaylistCmd";
 			this.DeletePlaylistCmd.Size = new System.Drawing.Size(85, 23);
@@ -409,17 +433,13 @@
 			// 
 			// NewPlaylistCmd
 			// 
+			this.NewPlaylistCmd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.NewPlaylistCmd.Location = new System.Drawing.Point(620, 284);
 			this.NewPlaylistCmd.Name = "NewPlaylistCmd";
 			this.NewPlaylistCmd.Size = new System.Drawing.Size(85, 23);
 			this.NewPlaylistCmd.TabIndex = 7;
 			this.NewPlaylistCmd.Text = "New Playlist";
 			this.NewPlaylistCmd.UseVisualStyleBackColor = true;
-			// 
-			// toolStripMenuItem5
-			// 
-			this.toolStripMenuItem5.Name = "toolStripMenuItem5";
-			this.toolStripMenuItem5.Size = new System.Drawing.Size(200, 6);
 			// 
 			// MainFrm
 			// 
