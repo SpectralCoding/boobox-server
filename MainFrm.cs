@@ -20,6 +20,7 @@ namespace BooBoxServer {
 		}
 
 		private void MainFrm_Load(object sender, EventArgs e) {
+
 			ToolStripManager.Renderer = new ToolStripProfessionalRenderer(new MenuStripNoGradient());
 		}
 
@@ -68,6 +69,10 @@ namespace BooBoxServer {
 		private void DebugCmd_Click(object sender, EventArgs e) {
 			FirstRunFrm FirstRunFrm = new FirstRunFrm();
 			FirstRunFrm.Show();
+		}
+
+		private void MainFrm_FormClosed(object sender, FormClosedEventArgs e) {
+			Log.CloseLog();
 		}
 	}
 }

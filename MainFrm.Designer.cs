@@ -670,6 +670,7 @@
 			this.MinimumSize = new System.Drawing.Size(500, 645);
 			this.Name = "MainFrm";
 			this.Text = "BooBox Server : Name";
+			this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainFrm_FormClosed);
 			this.Load += new System.EventHandler(this.MainFrm_Load);
 			this.Resize += new System.EventHandler(this.MainFrm_Resize);
 			this.MenuStrip.ResumeLayout(false);
