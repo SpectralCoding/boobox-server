@@ -10,6 +10,9 @@ using BooBox;
 
 namespace BooBoxServer {
 	public partial class MainFrm : Form {
+
+		private Boolean ConfigLoaded = false;
+
 		public MainFrm() {
 			InitializeComponent();
 		}
@@ -20,8 +23,9 @@ namespace BooBoxServer {
 		}
 
 		private void MainFrm_Load(object sender, EventArgs e) {
-
+			Log.AddStatusText("BooBox Server started.");
 			ToolStripManager.Renderer = new ToolStripProfessionalRenderer(new MenuStripNoGradient());
+			ConfigLoaded = true;
 		}
 
 		private void MainFrm_Resize(object sender, EventArgs e) {
@@ -72,6 +76,7 @@ namespace BooBoxServer {
 		}
 
 		private void MainFrm_FormClosed(object sender, FormClosedEventArgs e) {
+			Log.AddStatusText("BooBox Server close by user.");
 			Log.CloseLog();
 		}
 	}

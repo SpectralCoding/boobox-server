@@ -10,12 +10,10 @@ using BooBox;
 
 namespace BooBoxServer {
 	public sealed class Config {
-		/*
-		public ArrayList LibraryFolderList = new ArrayList();
-		public List<MusicFile> LibraryList = new List<MusicFile>();
-		public int CommInfoListeningPort = 1337;
-		public int CommStreamListeningPort = 1338;
-		public int CommMaxConnections = 20;
+		//public ArrayList LibraryFolderList = new ArrayList();
+		//public List<MusicFile> LibraryList = new List<MusicFile>();
+		public int CommInfoPort = 1337;
+		public int CommStreamPort = 1338;
 		public String ServerName = "";
 		public Boolean PasswordRequired = false;
 		public String ServerPassword = "";
@@ -33,7 +31,7 @@ namespace BooBoxServer {
 			TextWriter TextWriter = new StreamWriter(@"BooBoxServer.xml");
 			XmlSerializer.Serialize(TextWriter, this);
 			TextWriter.Close();
-			Functions.Log = "[ST] Configuration saved.";
+			Log.AddStatusText("Configuration saved");
 		}
 
 		/// <summary>
@@ -43,11 +41,11 @@ namespace BooBoxServer {
 		internal static Config Load() {
 			if (File.Exists("BooBoxServer.xml")) {
 				XmlSerializer XmlSerializer = new XmlSerializer(typeof(Config));
-				Functions.Log = "[ST] Configuration loaded from file.";
+				Log.AddStatusText("Configuration loaded from file.");
 				using (TextReader TextReader = new StreamReader("BooBoxServer.xml"))
 					return (Config)XmlSerializer.Deserialize(TextReader);
 			} else {
-				Functions.Log = "[ST] Configuration file nonexistant, loading blank configuration.";
+				Log.AddStatusText("Configuration file nonexistant, loading blank configuration.");
 				return new Config();
 			}
 		}
@@ -59,6 +57,5 @@ namespace BooBoxServer {
 			internal static readonly Config instance = Config.Load();
 		}
 		#endregion
-		 */
 	}
 }
