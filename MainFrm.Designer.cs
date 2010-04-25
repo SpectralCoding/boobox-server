@@ -23,8 +23,8 @@
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle19 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle20 = new System.Windows.Forms.DataGridViewCellStyle();
 			this.MenuStrip = new System.Windows.Forms.MenuStrip();
 			this.FileMenuHeader = new System.Windows.Forms.ToolStripMenuItem();
 			this.SaveSettingsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -90,6 +90,8 @@
 			this.DeletePlaylistCmd = new System.Windows.Forms.Button();
 			this.NewPlaylistCmd = new System.Windows.Forms.Button();
 			this.DebugCmd = new System.Windows.Forms.Button();
+			this.OpenFileDialog = new System.Windows.Forms.OpenFileDialog();
+			this.SaveFileDialog = new System.Windows.Forms.SaveFileDialog();
 			this.MenuStrip.SuspendLayout();
 			this.StatusStrip.SuspendLayout();
 			this.LibraryGrp.SuspendLayout();
@@ -132,6 +134,7 @@
 			this.SaveSettingsMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
 			this.SaveSettingsMenuItem.Size = new System.Drawing.Size(227, 22);
 			this.SaveSettingsMenuItem.Text = "&Save Settings...";
+			this.SaveSettingsMenuItem.Click += new System.EventHandler(this.SaveSettingsMenuItem_Click);
 			// 
 			// toolStripMenuItem2
 			// 
@@ -168,12 +171,14 @@
 			this.ExportSettingsMenuItem.Name = "ExportSettingsMenuItem";
 			this.ExportSettingsMenuItem.Size = new System.Drawing.Size(227, 22);
 			this.ExportSettingsMenuItem.Text = "&Export Settings...";
+			this.ExportSettingsMenuItem.Click += new System.EventHandler(this.ExportSettingsMenuItem_Click);
 			// 
 			// ImportSettingsMenuItem
 			// 
 			this.ImportSettingsMenuItem.Name = "ImportSettingsMenuItem";
 			this.ImportSettingsMenuItem.Size = new System.Drawing.Size(227, 22);
 			this.ImportSettingsMenuItem.Text = "&Import Settings...";
+			this.ImportSettingsMenuItem.Click += new System.EventHandler(this.ImportSettingsMenuItem_Click);
 			// 
 			// toolStripMenuItem3
 			// 
@@ -186,6 +191,7 @@
 			this.ExitMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F4)));
 			this.ExitMenuItem.Size = new System.Drawing.Size(227, 22);
 			this.ExitMenuItem.Text = "E&xit";
+			this.ExitMenuItem.Click += new System.EventHandler(this.ExitMenuItem_Click);
 			// 
 			// OptionsHeaderMenu
 			// 
@@ -217,36 +223,42 @@
 			this.Bytes512MenuItem.Name = "Bytes512MenuItem";
 			this.Bytes512MenuItem.Size = new System.Drawing.Size(221, 22);
 			this.Bytes512MenuItem.Text = "512 Bytes";
+			this.Bytes512MenuItem.Click += new System.EventHandler(this.Bytes512MenuItem_Click);
 			// 
 			// Bytes1024MenuItem
 			// 
 			this.Bytes1024MenuItem.Name = "Bytes1024MenuItem";
 			this.Bytes1024MenuItem.Size = new System.Drawing.Size(221, 22);
 			this.Bytes1024MenuItem.Text = "1024 Bytes";
+			this.Bytes1024MenuItem.Click += new System.EventHandler(this.Bytes1024MenuItem_Click);
 			// 
 			// Bytes2048MenuItem
 			// 
 			this.Bytes2048MenuItem.Name = "Bytes2048MenuItem";
 			this.Bytes2048MenuItem.Size = new System.Drawing.Size(221, 22);
 			this.Bytes2048MenuItem.Text = "2048 Bytes";
+			this.Bytes2048MenuItem.Click += new System.EventHandler(this.Bytes2048MenuItem_Click);
 			// 
 			// Bytes4096MenuItem
 			// 
 			this.Bytes4096MenuItem.Name = "Bytes4096MenuItem";
 			this.Bytes4096MenuItem.Size = new System.Drawing.Size(221, 22);
 			this.Bytes4096MenuItem.Text = "4096 Bytes (Recommended)";
+			this.Bytes4096MenuItem.Click += new System.EventHandler(this.Bytes4096MenuItem_Click);
 			// 
 			// Bytes8192MenuItem
 			// 
 			this.Bytes8192MenuItem.Name = "Bytes8192MenuItem";
 			this.Bytes8192MenuItem.Size = new System.Drawing.Size(221, 22);
 			this.Bytes8192MenuItem.Text = "8192 Bytes";
+			this.Bytes8192MenuItem.Click += new System.EventHandler(this.Bytes8192MenuItem_Click);
 			// 
 			// ChangeServerNameMenuItem
 			// 
 			this.ChangeServerNameMenuItem.Name = "ChangeServerNameMenuItem";
 			this.ChangeServerNameMenuItem.Size = new System.Drawing.Size(203, 22);
 			this.ChangeServerNameMenuItem.Text = "Change Server Name";
+			this.ChangeServerNameMenuItem.Click += new System.EventHandler(this.ChangeServerNameMenuItem_Click);
 			// 
 			// ChangeListeningPortsMenuItem
 			// 
@@ -285,8 +297,9 @@
 			// 
 			this.HelpMenuItem.Name = "HelpMenuItem";
 			this.HelpMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F1;
-			this.HelpMenuItem.Size = new System.Drawing.Size(118, 22);
+			this.HelpMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.HelpMenuItem.Text = "&Help";
+			this.HelpMenuItem.Click += new System.EventHandler(this.HelpMenuItem_Click);
 			// 
 			// toolStripMenuItem1
 			// 
@@ -341,8 +354,8 @@
 			this.MusicLibraryDGV.AllowUserToDeleteRows = false;
 			this.MusicLibraryDGV.AllowUserToResizeColumns = false;
 			this.MusicLibraryDGV.AllowUserToResizeRows = false;
-			dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(230)))), ((int)(((byte)(230)))));
-			this.MusicLibraryDGV.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+			dataGridViewCellStyle19.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(230)))), ((int)(((byte)(230)))));
+			this.MusicLibraryDGV.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle19;
 			this.MusicLibraryDGV.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
 						| System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
@@ -458,8 +471,8 @@
 			this.PlaylistDGV.AllowUserToDeleteRows = false;
 			this.PlaylistDGV.AllowUserToResizeColumns = false;
 			this.PlaylistDGV.AllowUserToResizeRows = false;
-			dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(230)))), ((int)(((byte)(230)))));
-			this.PlaylistDGV.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle2;
+			dataGridViewCellStyle20.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(230)))), ((int)(((byte)(230)))));
+			this.PlaylistDGV.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle20;
 			this.PlaylistDGV.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
 						| System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
@@ -652,6 +665,10 @@
 			this.DebugCmd.UseVisualStyleBackColor = true;
 			this.DebugCmd.Click += new System.EventHandler(this.DebugCmd_Click);
 			// 
+			// OpenFileDialog
+			// 
+			this.OpenFileDialog.FileName = "openFileDialog1";
+			// 
 			// MainFrm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -753,6 +770,8 @@
 		private System.Windows.Forms.DataGridViewTextBoxColumn YearPDGVColumn;
 		private System.Windows.Forms.DataGridViewTextBoxColumn CommentPDGVColumn;
 		private System.Windows.Forms.Button DebugCmd;
+		private System.Windows.Forms.OpenFileDialog OpenFileDialog;
+		private System.Windows.Forms.SaveFileDialog SaveFileDialog;
 	}
 }
 

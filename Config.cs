@@ -21,11 +21,13 @@ namespace BooBoxServer {
 		public String GUID = Guid.NewGuid().ToString();
 		public Boolean Configured = false;
 
+
+
 		#region Configuration Save/Load/Singleton Stuff
 		Config() { }
 
 		/// <summary>
-		/// Saves configuration to a the configuration file.
+		/// Saves configuration to the configuration file.
 		/// </summary>
 		public void Save() {
 			XmlSerializer XmlSerializer = new XmlSerializer(typeof(Config));
@@ -33,6 +35,32 @@ namespace BooBoxServer {
 			XmlSerializer.Serialize(TextWriter, this);
 			TextWriter.Close();
 			Log.AddStatusText("Configuration saved");
+		}
+
+		/// <summary>
+		/// Saves configuration to a configuration file.
+		/// </summary>
+		/// <param name="Filename">Filename to save Configuration as</param>
+		public void Save(String Filename) {
+			XmlSerializer XmlSerializer = new XmlSerializer(typeof(Config));
+			TextWriter TextWriter = new StreamWriter(Filename);
+			XmlSerializer.Serialize(TextWriter, this);
+			TextWriter.Close();
+			Log.AddStatusText("Configuration exported: " + Filename);
+		}
+
+		/// <summary>
+		/// Loads configuration from a configuration file.
+		/// </summary>
+		/// <param name="Filename">Filename to load configuration from</param>
+		/// <returns></returns>
+		public void Load(String Filename) {
+			if (File.Exists(Filename)) {
+				XmlSerializer XmlSerializer = new XmlSerializer(typeof(Config));
+				Log.AddStatusText("Configuration loaded from file: " + Filename);
+				using (TextReader TextReader = new StreamReader(Filename))
+					Config.Instance = (Config)XmlSerializer.Deserialize(TextReader);
+			}
 		}
 
 		/// <summary>
@@ -51,11 +79,14 @@ namespace BooBoxServer {
 			}
 		}
 
-		public static Config Instance { get { return Nested.instance; } }
+		public static Config Instance {
+			get { return Nested.instance; }
+			set { Nested.instance = value; }
+		}
 
 		class Nested {
 			static Nested() { }
-			internal static readonly Config instance = Config.Load();
+			internal static Config instance = Config.Load();
 		}
 		#endregion
 	}

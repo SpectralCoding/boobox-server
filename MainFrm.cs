@@ -99,8 +99,74 @@ namespace BooBoxServer {
 		}
 
 		private void MainFrm_FormClosed(object sender, FormClosedEventArgs e) {
+			Config.Instance.Save();
 			Log.AddStatusText("BooBox Server close by user.");
 			Log.CloseLog();
+		}
+
+		private void SaveSettingsMenuItem_Click(object sender, EventArgs e) {
+			Config.Instance.Save();
+		}
+
+		private void ExportSettingsMenuItem_Click(object sender, EventArgs e) {
+			SaveFileDialog.ShowDialog();
+			String SaveFileAs = SaveFileDialog.FileName;
+			if (SaveFileAs != "") {
+				Config.Instance.Save(SaveFileAs);
+			}
+		}
+
+		private void ImportSettingsMenuItem_Click(object sender, EventArgs e) {
+			OpenFileDialog.ShowDialog();
+			String OpenFilename = OpenFileDialog.FileName;
+			if (OpenFilename != "") {
+				Config.Instance.Load(OpenFilename);
+			}
+		}
+
+		private void ExitMenuItem_Click(object sender, EventArgs e) {
+			this.Close();
+		}
+
+		private void HelpMenuItem_Click(object sender, EventArgs e) {
+			MessageBox.Show("Help not yet implemented.");
+		}
+
+		private void Bytes512MenuItem_Click(object sender, EventArgs e) {
+			Log.AddStatusText("Changed Data Buffer Size from " + Config.Instance.DataBufferSize.ToString() + " bytes to 512 bytes.");
+			Config.Instance.DataBufferSize = 512;
+		}
+
+		private void Bytes1024MenuItem_Click(object sender, EventArgs e) {
+			Log.AddStatusText("Changed Data Buffer Size from " + Config.Instance.DataBufferSize.ToString() + " bytes to 1024 bytes.");
+			Config.Instance.DataBufferSize = 1024;
+		}
+
+		private void Bytes2048MenuItem_Click(object sender, EventArgs e) {
+			Log.AddStatusText("Changed Data Buffer Size from " + Config.Instance.DataBufferSize.ToString() + " bytes to 2048 bytes.");
+			Config.Instance.DataBufferSize = 2048;
+		}
+
+		private void Bytes4096MenuItem_Click(object sender, EventArgs e) {
+			Log.AddStatusText("Changed Data Buffer Size from " + Config.Instance.DataBufferSize.ToString() + " bytes to 4096 bytes.");
+			Config.Instance.DataBufferSize = 4096;
+		}
+
+		private void Bytes8192MenuItem_Click(object sender, EventArgs e) {
+			Log.AddStatusText("Changed Data Buffer Size from " + Config.Instance.DataBufferSize.ToString() + " bytes to 8192 bytes.");
+			Config.Instance.DataBufferSize = 8192;
+		}
+
+		private void ChangeServerNameMenuItem_Click(object sender, EventArgs e) {
+			InputBoxResult ServerRequestBox = InputBox.Show(
+				"Enter a Server Name:\n\nThis will be used to uniquely identify you to a Client.",
+				"Server Name Entry"
+			);
+			if (ServerRequestBox.ReturnCode == DialogResult.OK) {
+				Log.AddStatusText("Changed server name from \"" + Config.Instance.ServerName + "\" to \"" + ServerRequestBox.Text + "\".");
+				Config.Instance.ServerName = ServerRequestBox.Text;
+				Config.Instance.Save();
+			}
 		}
 	}
 
