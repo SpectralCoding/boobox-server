@@ -19,6 +19,7 @@ namespace BooBoxServer {
 		public String ServerPassword = "";
 		public int DataBufferSize = 4096;
 		public String GUID = Guid.NewGuid().ToString();
+		public Boolean Configured = false;
 
 		#region Configuration Save/Load/Singleton Stuff
 		Config() { }
@@ -58,4 +59,10 @@ namespace BooBoxServer {
 		}
 		#endregion
 	}
+
+	public static class Forms {
+		public static MainFrm MainFrm;
+		public static FirstRunFrm FirstRunFrm;
+	}
+
 }

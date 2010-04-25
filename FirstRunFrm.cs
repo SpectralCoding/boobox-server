@@ -26,7 +26,7 @@ namespace BooBoxServer {
 			CheckBox.Visible = false;
 			NextCmd.Text = "Next >";
 			if (CurrentPage != 0) { BackCmd.Enabled = true; } else { BackCmd.Enabled = false; }
-			if (CurrentPage < 0) { CurrentPage = 0; } else if (CurrentPage > 4) { CurrentPage = 4; }
+			if (CurrentPage < 0) { CurrentPage = 0; } else if (CurrentPage > 5) { CurrentPage = 5; }
 			if (CurrentPage == 0) {
 				#region Step 1: Welcome!
 				TitleLbl.Text = "Step 1: Welcome!";
@@ -47,7 +47,7 @@ namespace BooBoxServer {
 					CurrentPage--;
 					UpdateWizard();
 					MessageBox.Show("Server name may not be blank. Type a valid server name to continue.");
-				} else if (tempServerName.Length < 200) {
+				} else if (tempServerName.Length > 200) {
 					CurrentPage--;
 					UpdateWizard();
 					MessageBox.Show("Server name may not be longer than 200 characters. Type a valid server name to continue.");
@@ -109,12 +109,16 @@ namespace BooBoxServer {
 				}
 				#endregion
 			} else if (CurrentPage == 5) {
+				NextCmd.Text = "Finish";
 				Config.Instance.CommInfoPort = tempPortInfo;
 				Config.Instance.CommStreamPort = tempPortTrans;
 				Config.Instance.PasswordRequired = tempServerPasswordChk;
 				Config.Instance.ServerPassword = tempServerPassword;
 				Config.Instance.ServerName = tempServerName;
+				Config.Instance.Configured = true;
 				Config.Instance.Save();
+				Forms.MainFrm.UpdateFormState("Normal");
+				this.Close();
 			}
 		}
 
@@ -123,6 +127,7 @@ namespace BooBoxServer {
 		}
 
 		private void FirstRunFrm_Load(object sender, EventArgs e) {
+			Forms.FirstRunFrm = this;
 			TitleLbl.Text = "Step 1: Welcome!";
 			DescriptionLbl.Text = "Welcome to the BooBox Server First Run Wizard!\n\nThis wizard will allow you to specify several basic configuration options for your BooBox Server.\n\nYou can change all information specified in this wizard at a later point by choosing the appropriate option from one the Options menu found at the top of your server's interface.\n\nClick 'Next' to continue!";
 		}

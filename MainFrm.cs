@@ -11,6 +11,21 @@ using BooBox;
 namespace BooBoxServer {
 	public partial class MainFrm : Form {
 
+		#region Form Delegates
+		public delegate void ChangeFormStateDelegate(String FormState);
+		public void UpdateFormState(String FormState) {
+			if (this.InvokeRequired) {
+				this.Invoke(new ChangeFormStateDelegate(UpdateFormState), FormState);
+			} else {
+				if (FormState == "Minimize") {
+					this.WindowState = FormWindowState.Minimized;
+				} else if (FormState == "Normal") {
+					this.WindowState = FormWindowState.Normal;
+				}
+			}
+		}
+		#endregion
+
 		private Boolean ConfigLoaded = false;
 
 		public MainFrm() {
@@ -23,9 +38,17 @@ namespace BooBoxServer {
 		}
 
 		private void MainFrm_Load(object sender, EventArgs e) {
+			Forms.MainFrm = this;
 			Log.AddStatusText("BooBox Server started.");
 			ToolStripManager.Renderer = new ToolStripProfessionalRenderer(new MenuStripNoGradient());
-			ConfigLoaded = true;
+			if (Config.Instance.Configured == false) {
+				Log.AddStatusText("No configuration file loaded. Assuming new installation. Starting the First Run Wizard.");
+				FirstRunFrm FirstRunFrm = new FirstRunFrm();
+				FirstRunFrm.Show();
+				this.WindowState = FormWindowState.Minimized;
+			} else {
+				ConfigLoaded = true;
+			}
 		}
 
 		private void MainFrm_Resize(object sender, EventArgs e) {
@@ -80,4 +103,5 @@ namespace BooBoxServer {
 			Log.CloseLog();
 		}
 	}
+
 }
