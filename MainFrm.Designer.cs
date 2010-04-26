@@ -23,8 +23,8 @@
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle19 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle20 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle25 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle26 = new System.Windows.Forms.DataGridViewCellStyle();
 			this.MenuStrip = new System.Windows.Forms.MenuStrip();
 			this.FileMenuHeader = new System.Windows.Forms.ToolStripMenuItem();
 			this.SaveSettingsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -265,6 +265,7 @@
 			this.ChangeListeningPortsMenuItem.Name = "ChangeListeningPortsMenuItem";
 			this.ChangeListeningPortsMenuItem.Size = new System.Drawing.Size(203, 22);
 			this.ChangeListeningPortsMenuItem.Text = "Change Listening Ports";
+			this.ChangeListeningPortsMenuItem.Click += new System.EventHandler(this.ChangeListeningPortsMenuItem_Click);
 			// 
 			// toolStripMenuItem5
 			// 
@@ -276,12 +277,14 @@
 			this.ToggleServerPasswordMenuItem.Name = "ToggleServerPasswordMenuItem";
 			this.ToggleServerPasswordMenuItem.Size = new System.Drawing.Size(203, 22);
 			this.ToggleServerPasswordMenuItem.Text = "Enable Server Password";
+			this.ToggleServerPasswordMenuItem.Click += new System.EventHandler(this.ToggleServerPasswordMenuItem_Click);
 			// 
 			// ChangeServerPasswordMenuItem
 			// 
 			this.ChangeServerPasswordMenuItem.Name = "ChangeServerPasswordMenuItem";
 			this.ChangeServerPasswordMenuItem.Size = new System.Drawing.Size(203, 22);
 			this.ChangeServerPasswordMenuItem.Text = "Change Server Password";
+			this.ChangeServerPasswordMenuItem.Click += new System.EventHandler(this.ChangeServerPasswordMenuItem_Click);
 			// 
 			// HelpMenuHeader
 			// 
@@ -354,8 +357,8 @@
 			this.MusicLibraryDGV.AllowUserToDeleteRows = false;
 			this.MusicLibraryDGV.AllowUserToResizeColumns = false;
 			this.MusicLibraryDGV.AllowUserToResizeRows = false;
-			dataGridViewCellStyle19.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(230)))), ((int)(((byte)(230)))));
-			this.MusicLibraryDGV.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle19;
+			dataGridViewCellStyle25.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(230)))), ((int)(((byte)(230)))));
+			this.MusicLibraryDGV.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle25;
 			this.MusicLibraryDGV.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
 						| System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
@@ -471,8 +474,8 @@
 			this.PlaylistDGV.AllowUserToDeleteRows = false;
 			this.PlaylistDGV.AllowUserToResizeColumns = false;
 			this.PlaylistDGV.AllowUserToResizeRows = false;
-			dataGridViewCellStyle20.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(230)))), ((int)(((byte)(230)))));
-			this.PlaylistDGV.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle20;
+			dataGridViewCellStyle26.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(230)))), ((int)(((byte)(230)))));
+			this.PlaylistDGV.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle26;
 			this.PlaylistDGV.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
 						| System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));

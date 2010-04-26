@@ -89,6 +89,7 @@
 			this.DescriptionLbl.Size = new System.Drawing.Size(321, 277);
 			this.DescriptionLbl.TabIndex = 5;
 			this.DescriptionLbl.Text = "Description";
+			this.DescriptionLbl.Click += new System.EventHandler(this.DescriptionLbl_Click);
 			// 
 			// InputOneTxt
 			// 

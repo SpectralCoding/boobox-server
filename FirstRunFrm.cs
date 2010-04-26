@@ -117,7 +117,6 @@ namespace BooBoxServer {
 				Config.Instance.ServerName = tempServerName;
 				Config.Instance.Configured = true;
 				Config.Instance.Save();
-				Forms.MainFrm.UpdateFormState("Normal");
 				this.Close();
 			}
 		}
@@ -146,6 +145,10 @@ namespace BooBoxServer {
 
 		private void CheckBox_CheckedChanged(object sender, EventArgs e) {
 			InputOneTxt.Enabled = CheckBox.Checked;
+		}
+
+		private void DescriptionLbl_Click(object sender, EventArgs e) {
+
 		}
 	}
 }
