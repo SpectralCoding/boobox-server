@@ -81,7 +81,7 @@ namespace BooBoxServer {
 		public delegate void UpdateMusicLibraryDGVDelegate(List<SongInfo> SongList);
 		public void UpdateMusicLibraryDGV(List<SongInfo> SongList) {
 			if (this.InvokeRequired) {
-				this.Invoke(new UpdateMusicLibraryDGVDelegate(UpdateMusicLibraryDGV), SongList);
+				Thread WorkerThread = new Thread(delegate() { this.Invoke(new UpdateMusicLibraryDGVDelegate(UpdateMusicLibraryDGV), SongList); }); WorkerThread.Start();
 			} else {
 				int newRowNum, artistCount = 0, albumCount = 0;
 				ArrayList artistList = new ArrayList();

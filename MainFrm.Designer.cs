@@ -23,8 +23,8 @@
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
 			this.MenuStrip = new System.Windows.Forms.MenuStrip();
 			this.FileMenuHeader = new System.Windows.Forms.ToolStripMenuItem();
 			this.SaveSettingsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -366,11 +366,12 @@
 			this.MusicLibraryDGV.AllowUserToAddRows = false;
 			this.MusicLibraryDGV.AllowUserToDeleteRows = false;
 			this.MusicLibraryDGV.AllowUserToResizeRows = false;
-			dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(230)))), ((int)(((byte)(230)))));
-			this.MusicLibraryDGV.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+			dataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(230)))), ((int)(((byte)(230)))));
+			this.MusicLibraryDGV.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle3;
 			this.MusicLibraryDGV.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
 						| System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
+			this.MusicLibraryDGV.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleVertical;
 			this.MusicLibraryDGV.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			this.MusicLibraryDGV.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.TitleMLDGVColumn,
@@ -395,6 +396,7 @@
 			this.MusicLibraryDGV.RowHeadersVisible = false;
 			this.MusicLibraryDGV.RowTemplate.Height = 18;
 			this.MusicLibraryDGV.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+			this.MusicLibraryDGV.ShowEditingIcon = false;
 			this.MusicLibraryDGV.Size = new System.Drawing.Size(687, 227);
 			this.MusicLibraryDGV.TabIndex = 25;
 			this.MusicLibraryDGV.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.MusicLibraryDGV_ColumnHeaderMouseClick);
@@ -422,8 +424,8 @@
 			this.PlaylistDGV.AllowUserToDeleteRows = false;
 			this.PlaylistDGV.AllowUserToResizeColumns = false;
 			this.PlaylistDGV.AllowUserToResizeRows = false;
-			dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(230)))), ((int)(((byte)(230)))));
-			this.PlaylistDGV.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle2;
+			dataGridViewCellStyle4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(230)))), ((int)(((byte)(230)))));
+			this.PlaylistDGV.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle4;
 			this.PlaylistDGV.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
 						| System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
@@ -539,6 +541,7 @@
 			// 
 			// DebugCmd
 			// 
+			this.DebugCmd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.DebugCmd.Location = new System.Drawing.Point(636, -2);
 			this.DebugCmd.Name = "DebugCmd";
 			this.DebugCmd.Size = new System.Drawing.Size(75, 23);
@@ -647,7 +650,7 @@
 			// 
 			this.AlbumMLDGVColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
 			this.AlbumMLDGVColumn.HeaderText = "Album";
-			this.AlbumMLDGVColumn.MinimumWidth = 100;
+			this.AlbumMLDGVColumn.MinimumWidth = 125;
 			this.AlbumMLDGVColumn.Name = "AlbumMLDGVColumn";
 			// 
 			// LengthMLDGVColumn
