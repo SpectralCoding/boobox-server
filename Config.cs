@@ -10,8 +10,8 @@ using BooBox;
 
 namespace BooBoxServer {
 	public sealed class Config {
-		//public ArrayList LibraryFolderList = new ArrayList();
-		//public List<MusicFile> LibraryList = new List<MusicFile>();
+		public ArrayList LibraryFolderList = new ArrayList();
+		public List<SongInfo> LibrarySongList = new List<SongInfo>();
 		public int CommInfoPort = 1337;
 		public int CommStreamPort = 1338;
 		public String ServerName = "";

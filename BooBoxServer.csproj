@@ -47,6 +47,9 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="taglib-sharp">
+      <HintPath>..\zOld_Misc\taglib-sharp-2.0.3.7-windows\Libraries\taglib-sharp.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AboutFrm.cs">
@@ -62,6 +65,7 @@
     <Compile Include="FirstRunFrm.Designer.cs">
       <DependentUpon>FirstRunFrm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Library.cs" />
     <Compile Include="MainFrm.cs">
       <SubType>Form</SubType>
     </Compile>

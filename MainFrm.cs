@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.Threading;
 using BooBox;
 
 namespace BooBoxServer {
@@ -37,14 +38,68 @@ namespace BooBoxServer {
 			} else if (Config.Instance.DataBufferSize == 8192) {
 				Bytes512MenuItem.Checked = false; Bytes1024MenuItem.Checked = false; Bytes2048MenuItem.Checked = false; Bytes4096MenuItem.Checked = false; Bytes8192MenuItem.Checked = true;
 			}
+			ToolStripDropDownItem RemoveFolderItem = (ToolStripDropDownItem)((ToolStripDropDownItem)MenuStrip.Items["FileMenuHeader"]).DropDownItems["RemoveFolderFromLibraryMenuItem"];
+			RemoveFolderItem.DropDownItems.Clear();
+			ToolStripMenuItem[] RemoveFolderItemArr = new ToolStripMenuItem[Config.Instance.LibraryFolderList.Count];
+			for (int i = 0; i < Config.Instance.LibraryFolderList.Count; i++) {
+				RemoveFolderItemArr[i] = new ToolStripMenuItem();
+				RemoveFolderItemArr[i].Name = "RemoveItem" + i;
+				RemoveFolderItemArr[i].Tag = Config.Instance.LibraryFolderList[i];
+				RemoveFolderItemArr[i].Text = "Remove \"" + Config.Instance.LibraryFolderList[i] + "\"";
+				RemoveFolderItemArr[i].Click += new EventHandler(MenuRemoveFolderClickHandler);
+			}
+			RemoveFolderItem.DropDownItems.AddRange(RemoveFolderItemArr);
 		}
 		#endregion
 
 		#region Form Delegates
-
+		public delegate void UpdateStatusProgressBarDelegate(String Mode, int Param);
+		public void UpdateStatusProgressBar(String Mode, int Param) {
+			if (this.InvokeRequired) {
+				this.Invoke(new UpdateStatusProgressBarDelegate(UpdateStatusProgressBar), Mode, Param);
+			} else {
+				if (Mode == "SetMax") {
+					ProgressBarStatusStrip.Maximum = Param;
+				} else if (Mode == "SetMin") {
+					ProgressBarStatusStrip.Minimum = Param;
+				} else if (Mode == "Increment") {
+					ProgressBarStatusStrip.Increment(Param);
+				} else if (Mode == "Reset") {
+					ProgressBarStatusStrip.Value = 0;
+				}
+			}
+		}
+		public delegate void UpdateStatusLabelDelegate(String StatusText);
+		public void UpdateStatusLabel(String StatusText) {
+			if (this.InvokeRequired) {
+				this.Invoke(new UpdateStatusLabelDelegate(UpdateStatusLabel), StatusText);
+			} else {
+				ProgressBarLblStatusStrip.Text = StatusText;
+			}
+		}
 		#endregion
 
 		#region Menu Item Event Handlers
+		private void AddFolderToLibraryMenuItem_Click(object sender, EventArgs e) {
+			FolderBrowserDialog.ShowDialog();
+			String SelectedPath = FolderBrowserDialog.SelectedPath;
+			if (SelectedPath != "") {
+				if (SelectedPath.Substring(SelectedPath.Length - 1, 1) != "\\") {
+					SelectedPath += "\\";
+				}
+				Thread WorkerThread = new Thread(delegate() { Library.AddFolder(SelectedPath); });
+				WorkerThread.Start();
+			}
+			FolderBrowserDialog.Reset();
+			PushSettingsToForm();
+		}
+		private void RebuildLibraryMenuItem_Click(object sender, EventArgs e) {
+			Library.RebuildLibrary();
+		}
+		private void MenuRemoveFolderClickHandler(object sender, EventArgs e) {
+			ToolStripMenuItem clickedItem = (ToolStripMenuItem)sender;
+			Library.RemoveFolder(clickedItem.Tag.ToString());
+		}
 		private void AboutMenuItem_Click(object sender, EventArgs e) {
 			AboutFrm AboutFrm = new AboutFrm();
 			AboutFrm.Show();
@@ -177,6 +232,7 @@ namespace BooBoxServer {
 			} else {
 				ConfigLoaded = true;
 			}
+			Library.LoadSettings();
 			PushSettingsToForm();
 		}
 		private void MainFrm_Resize(object sender, EventArgs e) {
@@ -221,6 +277,7 @@ namespace BooBoxServer {
 			#endregion
 		}
 		private void MainFrm_FormClosed(object sender, FormClosedEventArgs e) {
+			Library.SaveSettings();
 			Config.Instance.Save();
 			Log.AddStatusText("BooBox Server close by user.");
 			Log.CloseLog();
@@ -231,6 +288,7 @@ namespace BooBoxServer {
 			FirstRunFrm FirstRunFrm = new FirstRunFrm();
 			FirstRunFrm.ShowDialog();
 		}
+
 
 	}
 }

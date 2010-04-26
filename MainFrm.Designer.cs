@@ -23,8 +23,8 @@
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle25 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle26 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
 			this.MenuStrip = new System.Windows.Forms.MenuStrip();
 			this.FileMenuHeader = new System.Windows.Forms.ToolStripMenuItem();
 			this.SaveSettingsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -92,6 +92,7 @@
 			this.DebugCmd = new System.Windows.Forms.Button();
 			this.OpenFileDialog = new System.Windows.Forms.OpenFileDialog();
 			this.SaveFileDialog = new System.Windows.Forms.SaveFileDialog();
+			this.FolderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
 			this.MenuStrip.SuspendLayout();
 			this.StatusStrip.SuspendLayout();
 			this.LibraryGrp.SuspendLayout();
@@ -147,6 +148,7 @@
 			this.AddFolderToLibraryMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.A)));
 			this.AddFolderToLibraryMenuItem.Size = new System.Drawing.Size(227, 22);
 			this.AddFolderToLibraryMenuItem.Text = "&Add Folder to Library";
+			this.AddFolderToLibraryMenuItem.Click += new System.EventHandler(this.AddFolderToLibraryMenuItem_Click);
 			// 
 			// RemoveFolderFromLibraryMenuItem
 			// 
@@ -160,6 +162,7 @@
 			this.RebuildLibraryMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.B)));
 			this.RebuildLibraryMenuItem.Size = new System.Drawing.Size(227, 22);
 			this.RebuildLibraryMenuItem.Text = "Re&build Library";
+			this.RebuildLibraryMenuItem.Click += new System.EventHandler(this.RebuildLibraryMenuItem_Click);
 			// 
 			// toolStripMenuItem4
 			// 
@@ -300,7 +303,7 @@
 			// 
 			this.HelpMenuItem.Name = "HelpMenuItem";
 			this.HelpMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F1;
-			this.HelpMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.HelpMenuItem.Size = new System.Drawing.Size(118, 22);
 			this.HelpMenuItem.Text = "&Help";
 			this.HelpMenuItem.Click += new System.EventHandler(this.HelpMenuItem_Click);
 			// 
@@ -357,8 +360,8 @@
 			this.MusicLibraryDGV.AllowUserToDeleteRows = false;
 			this.MusicLibraryDGV.AllowUserToResizeColumns = false;
 			this.MusicLibraryDGV.AllowUserToResizeRows = false;
-			dataGridViewCellStyle25.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(230)))), ((int)(((byte)(230)))));
-			this.MusicLibraryDGV.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle25;
+			dataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(230)))), ((int)(((byte)(230)))));
+			this.MusicLibraryDGV.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle3;
 			this.MusicLibraryDGV.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
 						| System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
@@ -474,8 +477,8 @@
 			this.PlaylistDGV.AllowUserToDeleteRows = false;
 			this.PlaylistDGV.AllowUserToResizeColumns = false;
 			this.PlaylistDGV.AllowUserToResizeRows = false;
-			dataGridViewCellStyle26.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(230)))), ((int)(((byte)(230)))));
-			this.PlaylistDGV.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle26;
+			dataGridViewCellStyle4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(230)))), ((int)(((byte)(230)))));
+			this.PlaylistDGV.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle4;
 			this.PlaylistDGV.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
 						| System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
@@ -775,6 +778,7 @@
 		private System.Windows.Forms.Button DebugCmd;
 		private System.Windows.Forms.OpenFileDialog OpenFileDialog;
 		private System.Windows.Forms.SaveFileDialog SaveFileDialog;
+		private System.Windows.Forms.FolderBrowserDialog FolderBrowserDialog;
 	}
 }
 
