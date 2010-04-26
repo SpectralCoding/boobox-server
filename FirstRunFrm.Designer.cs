@@ -134,6 +134,7 @@
 			this.Controls.Add(this.LineLbl);
 			this.Controls.Add(this.LogoPicBox);
 			this.Name = "FirstRunFrm";
+			this.ShowInTaskbar = false;
 			this.Text = "BooBox Server : First Run Wizard";
 			this.Load += new System.EventHandler(this.FirstRunFrm_Load);
 			((System.ComponentModel.ISupportInitialize)(this.LogoPicBox)).EndInit();
