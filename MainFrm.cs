@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -77,6 +78,110 @@ namespace BooBoxServer {
 				ProgressBarLblStatusStrip.Text = StatusText;
 			}
 		}
+		public delegate void UpdateMusicLibraryDGVDelegate(List<SongInfo> SongList);
+		public void UpdateMusicLibraryDGV(List<SongInfo> SongList) {
+			if (this.InvokeRequired) {
+				this.Invoke(new UpdateMusicLibraryDGVDelegate(UpdateMusicLibraryDGV), SongList);
+			} else {
+				int newRowNum, artistCount = 0, albumCount = 0;
+				ArrayList artistList = new ArrayList();
+				ArrayList albumList = new ArrayList();
+				MusicLibraryDGV.Rows.Clear();
+				for (int i = 0; i < SongList.Count; i++) {
+					newRowNum = MusicLibraryDGV.Rows.Add();
+					MusicLibraryDGV.Rows[newRowNum].Cells[0].Value = SongList[i].Title;
+					MusicLibraryDGV.Rows[newRowNum].Cells[1].Value = Functions.StringArrToDelimitedStr(SongList[i].AlbumArtists, "; ");
+					MusicLibraryDGV.Rows[newRowNum].Cells[2].Value = SongList[i].Album;
+					MusicLibraryDGV.Rows[newRowNum].Cells[3].Value = Functions.MillisecondsToHumanReadable(SongList[i].PlayLength);
+					MusicLibraryDGV.Rows[newRowNum].Cells[4].Value = Functions.BytesToHumanReadable(SongList[i].FileLength, 1);
+					MusicLibraryDGV.Rows[newRowNum].Cells[5].Value = SongList[i].PlayCount;
+					MusicLibraryDGV.Rows[newRowNum].Cells[6].Value = Functions.StringArrToDelimitedStr(SongList[i].Genres, "; ");
+					MusicLibraryDGV.Rows[newRowNum].Cells[7].Value = SongList[i].Track;
+					MusicLibraryDGV.Rows[newRowNum].Cells[8].Value = SongList[i].Year;
+					MusicLibraryDGV.Rows[newRowNum].Cells[9].Value = SongList[i].Comment;
+					MusicLibraryDGV.Rows[newRowNum].Cells[10].Value = SongList[i].FileName;
+					MusicLibraryDGV.Rows[newRowNum].Cells[11].Value = SongList[i].PlayLength.ToString("00000000");
+					MusicLibraryDGV.Rows[newRowNum].Cells[12].Value = SongList[i].FileLength.ToString("000000000");
+					MusicLibraryDGV.Rows[newRowNum].Cells[13].Value = SongList[i].PlayCount.ToString("000000");
+					MusicLibraryDGV.Rows[newRowNum].Cells[14].Value = SongList[i].Track.ToString("00000");
+					MusicLibraryDGV.Rows[newRowNum].Cells[15].Value = SongList[i].Year.ToString("00000");
+					if (!artistList.Contains(MusicLibraryDGV.Rows[newRowNum].Cells[1].Value)) {
+						artistCount++;
+						artistList.Add(MusicLibraryDGV.Rows[newRowNum].Cells[1].Value);
+					}
+					if (!albumList.Contains(SongList[i].Album)) {
+						albumCount++;
+						albumList.Add(SongList[i].Album);
+					}
+				}
+				MusicLibraryDGV.Sort(MusicLibraryDGV.Columns[0], System.ComponentModel.ListSortDirection.Ascending);
+				MusicLibraryDGV.Columns[0].HeaderText = "Title (" + SongList.Count + ")";
+				MusicLibraryDGV.Columns[1].HeaderText = "Artists (" + artistCount + ")";
+				MusicLibraryDGV.Columns[2].HeaderText = "Album (" + albumCount + ")";
+			}
+		}
+		#endregion
+
+		#region MusicLibraryDGV Event Handlers
+		private void MusicLibraryDGV_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e) {
+			if (e.ColumnIndex == 3) {
+				#region Play Length Column
+				if (MusicLibraryDGV.SortOrder == SortOrder.Ascending) {
+					MusicLibraryDGV.Sort(MusicLibraryDGV.Columns[11], ListSortDirection.Descending);
+					MusicLibraryDGV.Columns[3].HeaderCell.SortGlyphDirection = SortOrder.Descending;
+				} else if (MusicLibraryDGV.SortOrder == SortOrder.Descending) {
+					MusicLibraryDGV.Sort(MusicLibraryDGV.Columns[11], ListSortDirection.Ascending);
+					MusicLibraryDGV.Columns[3].HeaderCell.SortGlyphDirection = SortOrder.Ascending;
+				}
+				#endregion
+			} else if (e.ColumnIndex == 4) {
+				#region File Length Column
+				if (MusicLibraryDGV.SortOrder == SortOrder.Ascending) {
+					MusicLibraryDGV.Sort(MusicLibraryDGV.Columns[12], ListSortDirection.Descending);
+					MusicLibraryDGV.Columns[4].HeaderCell.SortGlyphDirection = SortOrder.Descending;
+				} else if (MusicLibraryDGV.SortOrder == SortOrder.Descending) {
+					MusicLibraryDGV.Sort(MusicLibraryDGV.Columns[12], ListSortDirection.Ascending);
+					MusicLibraryDGV.Columns[4].HeaderCell.SortGlyphDirection = SortOrder.Ascending;
+				}
+				#endregion
+			} else if (e.ColumnIndex == 5) {
+				#region Play Count Column
+				if (MusicLibraryDGV.SortOrder == SortOrder.Ascending) {
+					MusicLibraryDGV.Sort(MusicLibraryDGV.Columns[13], ListSortDirection.Descending);
+					MusicLibraryDGV.Columns[5].HeaderCell.SortGlyphDirection = SortOrder.Descending;
+				} else if (MusicLibraryDGV.SortOrder == SortOrder.Descending) {
+					MusicLibraryDGV.Sort(MusicLibraryDGV.Columns[13], ListSortDirection.Ascending);
+					MusicLibraryDGV.Columns[5].HeaderCell.SortGlyphDirection = SortOrder.Ascending;
+				}
+				#endregion
+			} else if (e.ColumnIndex == 7) {
+				#region Track Column
+				if (MusicLibraryDGV.SortOrder == SortOrder.Ascending) {
+					MusicLibraryDGV.Sort(MusicLibraryDGV.Columns[14], ListSortDirection.Descending);
+					MusicLibraryDGV.Columns[7].HeaderCell.SortGlyphDirection = SortOrder.Descending;
+				} else if (MusicLibraryDGV.SortOrder == SortOrder.Descending) {
+					MusicLibraryDGV.Sort(MusicLibraryDGV.Columns[14], ListSortDirection.Ascending);
+					MusicLibraryDGV.Columns[7].HeaderCell.SortGlyphDirection = SortOrder.Ascending;
+				}
+				#endregion
+			} else if (e.ColumnIndex == 8) {
+				#region Year Column
+				if (MusicLibraryDGV.SortOrder == SortOrder.Ascending) {
+					MusicLibraryDGV.Sort(MusicLibraryDGV.Columns[15], ListSortDirection.Descending);
+					MusicLibraryDGV.Columns[8].HeaderCell.SortGlyphDirection = SortOrder.Descending;
+				} else if (MusicLibraryDGV.SortOrder == SortOrder.Descending) {
+					MusicLibraryDGV.Sort(MusicLibraryDGV.Columns[15], ListSortDirection.Ascending);
+					MusicLibraryDGV.Columns[8].HeaderCell.SortGlyphDirection = SortOrder.Ascending;
+				}
+				#endregion
+			} else {
+				MusicLibraryDGV.Columns[3].HeaderCell.SortGlyphDirection = SortOrder.None;
+				MusicLibraryDGV.Columns[4].HeaderCell.SortGlyphDirection = SortOrder.None;
+				MusicLibraryDGV.Columns[5].HeaderCell.SortGlyphDirection = SortOrder.None;
+				MusicLibraryDGV.Columns[7].HeaderCell.SortGlyphDirection = SortOrder.None;
+				MusicLibraryDGV.Columns[8].HeaderCell.SortGlyphDirection = SortOrder.None;
+			}
+		}
 		#endregion
 
 		#region Menu Item Event Handlers
@@ -87,14 +192,14 @@ namespace BooBoxServer {
 				if (SelectedPath.Substring(SelectedPath.Length - 1, 1) != "\\") {
 					SelectedPath += "\\";
 				}
-				Thread WorkerThread = new Thread(delegate() { Library.AddFolder(SelectedPath); });
-				WorkerThread.Start();
+				Thread WorkerThread = new Thread(delegate() { Library.AddFolder(SelectedPath); }); WorkerThread.Start();
 			}
 			FolderBrowserDialog.Reset();
 			PushSettingsToForm();
 		}
 		private void RebuildLibraryMenuItem_Click(object sender, EventArgs e) {
-			Library.RebuildLibrary();
+			Thread WorkerThread = new Thread(delegate() { Library.RebuildLibrary(); });
+			WorkerThread.Start();
 		}
 		private void MenuRemoveFolderClickHandler(object sender, EventArgs e) {
 			ToolStripMenuItem clickedItem = (ToolStripMenuItem)sender;

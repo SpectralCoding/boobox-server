@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using System.Threading;
 using BooBox;
 
 namespace BooBoxServer {
@@ -25,6 +26,7 @@ namespace BooBoxServer {
 		public static void LoadSettings() {
 			SongList = Config.Instance.LibrarySongList;
 			FolderList = Config.Instance.LibraryFolderList;
+			Thread WorkerThread = new Thread(delegate() { Forms.MainFrm.UpdateMusicLibraryDGV(SongList); }); WorkerThread.Start();
 		}
 
 		/// <summary>
@@ -76,6 +78,7 @@ namespace BooBoxServer {
 				Forms.MainFrm.UpdateStatusProgressBar("Reset", 0);
 				Forms.MainFrm.UpdateStatusLabel("Ready");
 				SaveSettings();
+				Thread WorkerThread = new Thread(delegate() { Forms.MainFrm.UpdateMusicLibraryDGV(SongList); }); WorkerThread.Start();
 			}
 		}
 
@@ -98,6 +101,7 @@ namespace BooBoxServer {
 					i--;
 				}
 			}
+			Thread WorkerThread = new Thread(delegate() { Forms.MainFrm.UpdateMusicLibraryDGV(SongList); }); WorkerThread.Start();
 		}
 
 	}
