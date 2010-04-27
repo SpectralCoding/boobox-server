@@ -5,6 +5,7 @@ using System.Text;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
+using BooBox;
 
 namespace BooBoxServer {
 	public class ClientInfo {
@@ -12,7 +13,7 @@ namespace BooBoxServer {
 		public int Index;
 		public String Name;
 		public String Version;
-		public String ConnectionStatus;
+		public ConnectionStatus ConnectionStatus;
 		public String DataBuffer;
 
 		/// <summary>
@@ -23,7 +24,7 @@ namespace BooBoxServer {
 		public ClientInfo(Socket iSocket, int iClientInfoIndex) {
 			Socket = iSocket;
 			Index = iClientInfoIndex;
-			ConnectionStatus = "PENDING";
+			ConnectionStatus = ConnectionStatus.Pending;
 			OnClientConnect();
 		}
 
