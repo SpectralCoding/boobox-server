@@ -18,7 +18,7 @@ namespace BooBoxServer {
 		public Boolean PasswordRequired = false;
 		public String ServerPassword = "";
 		public int DataBufferSize = 4096;
-		public String GUID = Guid.NewGuid().ToString();
+		public String GUID = "";
 		public Boolean Configured = false;
 
 

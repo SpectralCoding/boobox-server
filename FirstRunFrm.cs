@@ -115,6 +115,7 @@ namespace BooBoxServer {
 				Config.Instance.PasswordRequired = tempServerPasswordChk;
 				Config.Instance.ServerPassword = tempServerPassword;
 				Config.Instance.ServerName = tempServerName;
+				Config.Instance.GUID = Guid.NewGuid().ToString();
 				Config.Instance.Configured = true;
 				Config.Instance.Save();
 				this.Close();

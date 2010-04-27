@@ -339,6 +339,7 @@ namespace BooBoxServer {
 			}
 			Library.LoadSettings();
 			PushSettingsToForm();
+			CommInfo.StartListening();
 		}
 		private void MainFrm_Resize(object sender, EventArgs e) {
 			#region Horizontal Calculations

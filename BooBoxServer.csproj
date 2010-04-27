@@ -58,6 +58,7 @@
     <Compile Include="AboutFrm.Designer.cs">
       <DependentUpon>AboutFrm.cs</DependentUpon>
     </Compile>
+    <Compile Include="CommInfo.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="FirstRunFrm.cs">
       <SubType>Form</SubType>
@@ -65,6 +66,7 @@
     <Compile Include="FirstRunFrm.Designer.cs">
       <DependentUpon>FirstRunFrm.cs</DependentUpon>
     </Compile>
+    <Compile Include="ClientInfo.cs" />
     <Compile Include="Library.cs" />
     <Compile Include="MainFrm.cs">
       <SubType>Form</SubType>
