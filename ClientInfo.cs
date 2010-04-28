@@ -104,6 +104,46 @@ namespace BooBoxServer {
 					}
 					break;
 					#endregion
+				case "REQUEST":
+					#region REQUEST
+					if (ConnectionStatus == ConnectionStatus.Connected) {
+						String[] requestData = tokenData[1].Split(spaceDelim, 2);
+						switch (requestData[0]) {
+							case "LIBRARY":
+								#region LIBRARY
+								DateTime ClientLibraryDate = Convert.ToDateTime(requestData[1]).ToUniversalTime();
+								if (DateTime.Compare(ClientLibraryDate, Library.LastEditDataTime) < 0) {
+									String LibraryXML = Library.GetXMLString();
+									String CompressedString = Functions.CompressString(LibraryXML);
+									Log.AddClientText("Sending Library (" + CompressedString.Length + " Bytes)...", Index);
+									Send(Protocol.CreateREQUESTRLIBRARYMETA(CompressedString, Library.SongCount, Library.LastEditDataTime));
+									Send(Protocol.CreateREQUESTRLIBRARY(CompressedString));
+									Log.AddClientText("Done Sending Library.", Index);
+								} else {
+									Log.AddClientText("Client's library is already up to date.", Index);
+									Send(Protocol.CreateREQUESTRLIBRARYUPTODATE());
+								}
+								break;
+								#endregion
+							case "SONG":
+								#region SONG
+								/*
+								requestData[1] = requestData[1].Replace("\\\\", "");
+								FileStream MusicFileFS = new FileStream(requestData[1], FileMode.Open, FileAccess.Read);
+								Functions.Log = "[CI" + ClientInfo.Index + "] Requested Song: " + requestData[1];
+								Functions.Log = "[CI" + ClientInfo.Index + "]   Sending Song Info...";
+								ClientInfo.Send(CreateREQUESTRSONGINFO(requestData[1]));
+								ClientInfo.Send(CreateREQUESTRSONGKEY(StreamManager.AddSongRequest(ClientInfo, MusicFileFS.Name)));
+								*/
+								break;
+								#endregion
+						}
+					} else {
+						Log.AddClientText("Requested data before fully connected. Terminating connection.", Index);
+						Send(Protocol.CreateGOODBYE());
+					}
+					break;
+					#endregion
 				case "GOODBYE":
 					#region GOODBYE
 					Log.AddClientText("\"" + Name + "\" sent GOODBYE. Disconnecting...", Index);

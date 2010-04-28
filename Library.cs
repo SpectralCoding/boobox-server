@@ -5,12 +5,22 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Threading;
+using System.Xml;
 using BooBox;
 
 namespace BooBoxServer {
 	public static class Library {
 		private static ArrayList FolderList = new ArrayList();
 		private static List<SongInfo> SongList = new List<SongInfo>();
+		private static DateTime iLastEditDataTime;
+
+		public static int SongCount {
+			get { return SongList.Count; }
+		}
+
+		public static DateTime LastEditDataTime {
+			get { return iLastEditDataTime; }
+		}
 
 		/// <summary>
 		/// Saves settings to the Config object.
@@ -18,6 +28,7 @@ namespace BooBoxServer {
 		public static void SaveSettings() {
 			Config.Instance.LibrarySongList = SongList;
 			Config.Instance.LibraryFolderList = FolderList;
+			Config.Instance.LibraryLastEditDataTime = iLastEditDataTime;
 		}
 
 		/// <summary>
@@ -26,6 +37,7 @@ namespace BooBoxServer {
 		public static void LoadSettings() {
 			SongList = Config.Instance.LibrarySongList;
 			FolderList = Config.Instance.LibraryFolderList;
+			iLastEditDataTime = Config.Instance.LibraryLastEditDataTime;
 			Thread WorkerThread = new Thread(delegate() { Forms.MainFrm.UpdateMusicLibraryDGV(SongList); }); WorkerThread.Start();
 		}
 
@@ -77,6 +89,7 @@ namespace BooBoxServer {
 				}
 				Forms.MainFrm.UpdateStatusProgressBar("Reset", 0);
 				Forms.MainFrm.UpdateStatusLabel("Ready");
+				iLastEditDataTime = DateTime.UtcNow;
 				SaveSettings();
 				Thread WorkerThread = new Thread(delegate() { Forms.MainFrm.UpdateMusicLibraryDGV(SongList); }); WorkerThread.Start();
 			}
@@ -101,8 +114,49 @@ namespace BooBoxServer {
 					i--;
 				}
 			}
+			iLastEditDataTime = DateTime.UtcNow;
 			Thread WorkerThread = new Thread(delegate() { Forms.MainFrm.UpdateMusicLibraryDGV(SongList); }); WorkerThread.Start();
 		}
+
+		/// <summary>
+		/// Returns an XML String containing ID3 Tag data fro all songs in LibraryList.
+		/// </summary>
+		/// <returns>XML String</returns>
+		public static String GetXMLString() {
+			StringWriter tempResult = new StringWriter();
+			XmlWriter XmlWriter = XmlWriter.Create(tempResult);
+			XmlWriter.WriteStartDocument();
+			XmlWriter.WriteStartElement("songdata");
+			foreach (SongInfo tempSI in SongList) {
+				XmlWriter.WriteStartElement("song");
+				XmlWriter.WriteElementString("album", tempSI.Album);
+				XmlWriter.WriteStartElement("albumartists");
+				for (int i = 0; i < tempSI.AlbumArtists.Length; i++) { XmlWriter.WriteElementString("artist", tempSI.AlbumArtists[i]); }
+				XmlWriter.WriteEndElement();
+				XmlWriter.WriteElementString("bitrate", tempSI.BitRate.ToString());
+				XmlWriter.WriteElementString("comment", tempSI.Comment);
+				XmlWriter.WriteElementString("endbyte", tempSI.EndByte.ToString());
+				XmlWriter.WriteElementString("filelength", tempSI.FileLength.ToString());
+				XmlWriter.WriteElementString("filename", tempSI.FileName);
+				XmlWriter.WriteStartElement("genres");
+				for (int i = 0; i < tempSI.Genres.Length; i++) { XmlWriter.WriteElementString("genre", tempSI.Genres[i]); }
+				XmlWriter.WriteEndElement();
+				XmlWriter.WriteElementString("md5", tempSI.MD5);
+				XmlWriter.WriteElementString("playcount", tempSI.PlayCount.ToString());
+				XmlWriter.WriteElementString("playlength", tempSI.PlayLength.ToString());
+				XmlWriter.WriteElementString("startbyte", tempSI.StartByte.ToString());
+				XmlWriter.WriteElementString("title", tempSI.Title);
+				XmlWriter.WriteElementString("track", tempSI.Track.ToString());
+				XmlWriter.WriteElementString("trackcount", tempSI.TrackCount.ToString());
+				XmlWriter.WriteElementString("year", tempSI.Year.ToString());
+				XmlWriter.WriteEndElement();
+			}
+			XmlWriter.WriteEndElement();
+			XmlWriter.WriteEndDocument();
+			XmlWriter.Close();
+			return tempResult.ToString();
+		}
+
 
 	}
 }
