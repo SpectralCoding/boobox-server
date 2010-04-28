@@ -13,6 +13,8 @@ using BooBox;
 namespace BooBoxServer {
 	public partial class MainFrm : Form {
 
+		// TODO: Bug where when adding folders to the library they don't show up in the Remove list automatically.
+
 		#region Form Variables
 		private Boolean ConfigLoaded = false;
 		#endregion
