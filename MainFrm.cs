@@ -555,6 +555,7 @@ namespace BooBoxServer {
 			if (PlaylistComb.SelectedIndex != -1) {
 				UpdatePlaylistDGV(PlaylistManager.GetPlaylistListByName(PlaylistComb.SelectedItem.ToString().Substring(0, PlaylistComb.SelectedItem.ToString().LastIndexOf(" ("))));
 				UpCmd.Enabled = false; ToTopCmd.Enabled = false; DownCmd.Enabled = true; ToBottomCmd.Enabled = true; DelCmd.Enabled = true;
+				PlaylistDGV.Focus();
 			} else {
 				PlaylistDGV.Rows.Clear();
 				UpCmd.Enabled = false; ToTopCmd.Enabled = false; DownCmd.Enabled = false; ToBottomCmd.Enabled = false; DelCmd.Enabled = false;
@@ -584,6 +585,7 @@ namespace BooBoxServer {
 			}
 		}
 		private void DeletePlaylistCmd_Click(object sender, EventArgs e) {
+			UpdateStatusLabel("Deleted the \"" + PlaylistComb.SelectedItem.ToString().Substring(0, PlaylistComb.SelectedItem.ToString().LastIndexOf(" (")) + "\" playlist.");
 			PlaylistManager.DeletePlaylistByName(PlaylistComb.SelectedItem.ToString().Substring(0, PlaylistComb.SelectedItem.ToString().LastIndexOf(" (")));
 			PlaylistComb.SelectedIndex = -1;
 			PopulatePlaylistComb();
@@ -595,6 +597,7 @@ namespace BooBoxServer {
 			}
 			PlaylistManager.AddSongInfoListToPlaylist(tempSIL, PlaylistComb.SelectedItem.ToString().Substring(0, PlaylistComb.SelectedItem.ToString().LastIndexOf(" (")));
 			UpdatePlaylistDGV(PlaylistManager.GetPlaylistListByName(PlaylistComb.SelectedItem.ToString().Substring(0, PlaylistComb.SelectedItem.ToString().LastIndexOf(" ("))));
+			UpdateStatusLabel("Added " + tempSIL.Count + " songs to the \"" + PlaylistComb.SelectedItem.ToString().Substring(0, PlaylistComb.SelectedItem.ToString().LastIndexOf(" (")) + "\" playlist.");
 		}
 		private void ToTopCmd_Click(object sender, EventArgs e) {
 			ArrayList SelectionAL = new ArrayList();
