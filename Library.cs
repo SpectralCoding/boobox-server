@@ -38,7 +38,8 @@ namespace BooBoxServer {
 			SongList = Config.Instance.LibrarySongList;
 			FolderList = Config.Instance.LibraryFolderList;
 			iLastEditDataTime = Config.Instance.LibraryLastEditDataTime;
-			Thread WorkerThread = new Thread(delegate() { Forms.MainFrm.UpdateMusicLibraryDGV(SongList); }); WorkerThread.Start();
+			Forms.MainFrm.UpdateMusicLibraryDGV(SongList);
+			//Thread WorkerThread = new Thread(delegate() { Forms.MainFrm.UpdateMusicLibraryDGV(SongList); }); WorkerThread.Start();
 		}
 
 		/// <summary>

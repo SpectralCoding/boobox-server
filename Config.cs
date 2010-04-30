@@ -10,9 +10,6 @@ using BooBox;
 
 namespace BooBoxServer {
 	public sealed class Config {
-		public ArrayList LibraryFolderList = new ArrayList();
-		public List<SongInfo> LibrarySongList = new List<SongInfo>();
-		public DateTime LibraryLastEditDataTime = DateTime.UtcNow;
 		public int CommInfoPort = 1337;
 		public int CommStreamPort = 1338;
 		public String ServerName = "";
@@ -21,8 +18,10 @@ namespace BooBoxServer {
 		public int DataBufferSize = 4096;
 		public String GUID = "";
 		public Boolean Configured = false;
-
-
+		public List<Playlist> PlaylistList = new List<Playlist>();
+		public ArrayList LibraryFolderList = new ArrayList();
+		public DateTime LibraryLastEditDataTime = DateTime.UtcNow;
+		public List<SongInfo> LibrarySongList = new List<SongInfo>();
 
 		#region Configuration Save/Load/Singleton Stuff
 		Config() { }
