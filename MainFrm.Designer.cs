@@ -577,56 +577,67 @@
 			this.PlaylistDGV.Size = new System.Drawing.Size(648, 241);
 			this.PlaylistDGV.TabIndex = 26;
 			this.PlaylistDGV.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.PlaylistDGV_ColumnHeaderMouseClick);
+			this.PlaylistDGV.SelectionChanged += new System.EventHandler(this.PlaylistDGV_SelectionChanged);
 			// 
 			// DelCmd
 			// 
 			this.DelCmd.Anchor = System.Windows.Forms.AnchorStyles.Right;
+			this.DelCmd.Enabled = false;
 			this.DelCmd.Location = new System.Drawing.Point(660, 123);
 			this.DelCmd.Name = "DelCmd";
 			this.DelCmd.Size = new System.Drawing.Size(33, 33);
 			this.DelCmd.TabIndex = 12;
 			this.DelCmd.Text = "Del";
 			this.DelCmd.UseVisualStyleBackColor = true;
+			this.DelCmd.Click += new System.EventHandler(this.DelCmd_Click);
 			// 
 			// ToBottomCmd
 			// 
 			this.ToBottomCmd.Anchor = System.Windows.Forms.AnchorStyles.Right;
+			this.ToBottomCmd.Enabled = false;
 			this.ToBottomCmd.Location = new System.Drawing.Point(660, 214);
 			this.ToBottomCmd.Name = "ToBottomCmd";
 			this.ToBottomCmd.Size = new System.Drawing.Size(33, 46);
 			this.ToBottomCmd.TabIndex = 14;
 			this.ToBottomCmd.Text = "\\/ \\/";
 			this.ToBottomCmd.UseVisualStyleBackColor = true;
+			this.ToBottomCmd.Click += new System.EventHandler(this.ToBottomCmd_Click);
 			// 
 			// DownCmd
 			// 
 			this.DownCmd.Anchor = System.Windows.Forms.AnchorStyles.Right;
+			this.DownCmd.Enabled = false;
 			this.DownCmd.Location = new System.Drawing.Point(660, 162);
 			this.DownCmd.Name = "DownCmd";
 			this.DownCmd.Size = new System.Drawing.Size(33, 46);
 			this.DownCmd.TabIndex = 13;
 			this.DownCmd.Text = "\\/";
 			this.DownCmd.UseVisualStyleBackColor = true;
+			this.DownCmd.Click += new System.EventHandler(this.DownCmd_Click);
 			// 
 			// UpCmd
 			// 
 			this.UpCmd.Anchor = System.Windows.Forms.AnchorStyles.Right;
+			this.UpCmd.Enabled = false;
 			this.UpCmd.Location = new System.Drawing.Point(660, 71);
 			this.UpCmd.Name = "UpCmd";
 			this.UpCmd.Size = new System.Drawing.Size(33, 46);
 			this.UpCmd.TabIndex = 11;
 			this.UpCmd.Text = "/\\";
 			this.UpCmd.UseVisualStyleBackColor = true;
+			this.UpCmd.Click += new System.EventHandler(this.UpCmd_Click);
 			// 
 			// ToTopCmd
 			// 
 			this.ToTopCmd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.ToTopCmd.Enabled = false;
 			this.ToTopCmd.Location = new System.Drawing.Point(660, 19);
 			this.ToTopCmd.Name = "ToTopCmd";
 			this.ToTopCmd.Size = new System.Drawing.Size(33, 46);
 			this.ToTopCmd.TabIndex = 10;
 			this.ToTopCmd.Text = "/\\ /\\";
 			this.ToTopCmd.UseVisualStyleBackColor = true;
+			this.ToTopCmd.Click += new System.EventHandler(this.ToTopCmd_Click);
 			// 
 			// PlaylistComb
 			// 
@@ -639,6 +650,7 @@
 			this.PlaylistComb.Sorted = true;
 			this.PlaylistComb.TabIndex = 4;
 			this.PlaylistComb.SelectedIndexChanged += new System.EventHandler(this.PlaylistComb_SelectedIndexChanged);
+			this.PlaylistComb.Click += new System.EventHandler(this.PlaylistComb_Click);
 			this.PlaylistComb.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.PlaylistComb_KeyPress);
 			// 
 			// AddToPlaylistCmd

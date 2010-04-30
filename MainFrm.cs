@@ -60,6 +60,15 @@ namespace BooBoxServer {
 				PlaylistComb.Items.Add(tempString[i]);
 			}
 		}
+		private void SaveCurrentPlaylist() {
+			List<SongInfo> tempSIL = new List<SongInfo>();
+			for (int i = 0; i < PlaylistDGV.RowCount; i++) {
+				tempSIL.Add((SongInfo)PlaylistDGV.Rows[i].Tag);
+				PlaylistDGV.Rows[i].Cells[0].Value = i;
+			}
+			PlaylistManager.OverwritePlaylistByName(tempSIL, PlaylistComb.SelectedItem.ToString().Substring(0, PlaylistComb.SelectedItem.ToString().LastIndexOf(" (")));
+			PlaylistComb.Text = PlaylistComb.SelectedItem.ToString().Substring(0, PlaylistComb.SelectedItem.ToString().LastIndexOf(" (")) + " (" + PlaylistDGV.Rows.Count + ")";
+		}
 		#endregion
 
 		#region Form Delegates
@@ -175,64 +184,73 @@ namespace BooBoxServer {
 		}
 		#endregion
 
-		#region MusicLibraryDGV Event Handlers
-		private void MusicLibraryDGV_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e) {
-			MusicLibraryDGV.Columns[3].HeaderCell.SortGlyphDirection = SortOrder.None;
-			MusicLibraryDGV.Columns[4].HeaderCell.SortGlyphDirection = SortOrder.None;
-			MusicLibraryDGV.Columns[5].HeaderCell.SortGlyphDirection = SortOrder.None;
-			MusicLibraryDGV.Columns[7].HeaderCell.SortGlyphDirection = SortOrder.None;
-			MusicLibraryDGV.Columns[8].HeaderCell.SortGlyphDirection = SortOrder.None;
-			if (e.ColumnIndex == 3) {
-				#region Play Length Column
-				if (MusicLibraryDGV.SortOrder == SortOrder.Ascending) {
-					MusicLibraryDGV.Sort(MusicLibraryDGV.Columns[11], ListSortDirection.Descending);
-					MusicLibraryDGV.Columns[3].HeaderCell.SortGlyphDirection = SortOrder.Descending;
-				} else if (MusicLibraryDGV.SortOrder == SortOrder.Descending) {
-					MusicLibraryDGV.Sort(MusicLibraryDGV.Columns[11], ListSortDirection.Ascending);
-					MusicLibraryDGV.Columns[3].HeaderCell.SortGlyphDirection = SortOrder.Ascending;
-				}
-				#endregion
-			} else if (e.ColumnIndex == 4) {
-				#region File Length Column
-				if (MusicLibraryDGV.SortOrder == SortOrder.Ascending) {
-					MusicLibraryDGV.Sort(MusicLibraryDGV.Columns[12], ListSortDirection.Descending);
-					MusicLibraryDGV.Columns[4].HeaderCell.SortGlyphDirection = SortOrder.Descending;
-				} else if (MusicLibraryDGV.SortOrder == SortOrder.Descending) {
-					MusicLibraryDGV.Sort(MusicLibraryDGV.Columns[12], ListSortDirection.Ascending);
-					MusicLibraryDGV.Columns[4].HeaderCell.SortGlyphDirection = SortOrder.Ascending;
-				}
-				#endregion
-			} else if (e.ColumnIndex == 5) {
-				#region Play Count Column
-				if (MusicLibraryDGV.SortOrder == SortOrder.Ascending) {
-					MusicLibraryDGV.Sort(MusicLibraryDGV.Columns[13], ListSortDirection.Descending);
-					MusicLibraryDGV.Columns[5].HeaderCell.SortGlyphDirection = SortOrder.Descending;
-				} else if (MusicLibraryDGV.SortOrder == SortOrder.Descending) {
-					MusicLibraryDGV.Sort(MusicLibraryDGV.Columns[13], ListSortDirection.Ascending);
-					MusicLibraryDGV.Columns[5].HeaderCell.SortGlyphDirection = SortOrder.Ascending;
-				}
-				#endregion
-			} else if (e.ColumnIndex == 7) {
-				#region Track Column
-				if (MusicLibraryDGV.SortOrder == SortOrder.Ascending) {
-					MusicLibraryDGV.Sort(MusicLibraryDGV.Columns[14], ListSortDirection.Descending);
-					MusicLibraryDGV.Columns[7].HeaderCell.SortGlyphDirection = SortOrder.Descending;
-				} else if (MusicLibraryDGV.SortOrder == SortOrder.Descending) {
-					MusicLibraryDGV.Sort(MusicLibraryDGV.Columns[14], ListSortDirection.Ascending);
-					MusicLibraryDGV.Columns[7].HeaderCell.SortGlyphDirection = SortOrder.Ascending;
-				}
-				#endregion
-			} else if (e.ColumnIndex == 8) {
-				#region Year Column
-				if (MusicLibraryDGV.SortOrder == SortOrder.Ascending) {
-					MusicLibraryDGV.Sort(MusicLibraryDGV.Columns[15], ListSortDirection.Descending);
-					MusicLibraryDGV.Columns[8].HeaderCell.SortGlyphDirection = SortOrder.Descending;
-				} else if (MusicLibraryDGV.SortOrder == SortOrder.Descending) {
-					MusicLibraryDGV.Sort(MusicLibraryDGV.Columns[15], ListSortDirection.Ascending);
-					MusicLibraryDGV.Columns[8].HeaderCell.SortGlyphDirection = SortOrder.Ascending;
-				}
-				#endregion
+		#region Form Event Handlers
+		private void MainFrm_Load(object sender, EventArgs e) {
+			Forms.MainFrm = this;
+			Log.AddStatusText("BooBox Server started.");
+			ToolStripManager.Renderer = new ToolStripProfessionalRenderer(new MenuStripNoGradient());
+			if (Config.Instance.Configured == false) {
+				Log.AddStatusText("No configuration file loaded. Assuming new installation. Starting the First Run Wizard.");
+				FirstRunFrm FirstRunFrm = new FirstRunFrm();
+				FirstRunFrm.ShowDialog();
+				ConfigLoaded = true;
+			} else {
+				ConfigLoaded = true;
 			}
+			Library.LoadSettings();
+			PlaylistManager.PlaylistList = Config.Instance.PlaylistList;
+			PushSettingsToForm();
+			PopulatePlaylistComb();
+			MusicLibraryDGV.ClearSelection();
+			CommInfo.StartListening();
+		}
+		private void MainFrm_Resize(object sender, EventArgs e) {
+			#region Horizontal Calculations
+			//LibraryGrp.Width = this.Width - 28;
+			//LibraryDGV.Width = LibraryGrp.Width - 12;
+			//PlaylistComb.Width = this.Width - 307;
+			//AddToPlaylistCmd.Left = this.Width - 289;
+			//DeletePlaylistCmd.Left = this.Width - 198;
+			//NewPlaylistCmd.Left = this.Width - 107;
+			//PlaylistGrp.Width = this.Width - 28;
+			//PlaylistDGV.Width = PlaylistGrp.Width - 51;
+			//ToTopCmd.Left = PlaylistGrp.Width - 39;
+			//UpCmd.Left = PlaylistGrp.Width - 39;
+			//DelCmd.Left = PlaylistGrp.Width - 39;
+			//DownCmd.Left = PlaylistGrp.Width - 39;
+			//ToBottomCmd.Left = PlaylistGrp.Width - 39;
+			#endregion
+			#region Vertical Calculations
+			// Exact Calculation: 0.3922480620155039
+			LibraryGrp.Height = Convert.ToInt32(this.Height * 0.3923);
+			//LibraryDGV.Height = LibraryGrp.Height - 26;
+			PlaylistComb.Top = LibraryGrp.Top + LibraryGrp.Height + 6;
+			AddToPlaylistCmd.Top = PlaylistComb.Top - 2;
+			DeletePlaylistCmd.Top = PlaylistComb.Top - 2;
+			NewPlaylistCmd.Top = PlaylistComb.Top - 2;
+			PlaylistGrp.Top = PlaylistComb.Top + 27;
+			PlaylistGrp.Height = this.Height - PlaylistGrp.Top - 65;
+			//PlaylistDGV.Height = PlaylistGrp.Height - 26;
+			// Exact Calculation: 0.2119815668202765
+			int PlaylistButtonHeight = Convert.ToInt32((PlaylistDGV.Height - 23) * 0.212);
+			ToTopCmd.Height = PlaylistButtonHeight;
+			UpCmd.Height = PlaylistButtonHeight;
+			// Exact Calculation: 0.152073732718894
+			DelCmd.Height = Convert.ToInt32((PlaylistDGV.Height - 23) * 0.1521);
+			DownCmd.Height = PlaylistButtonHeight;
+			ToBottomCmd.Height = PlaylistButtonHeight;
+			UpCmd.Top = ToTopCmd.Top + ToTopCmd.Height + 6;
+			DelCmd.Top = UpCmd.Top + UpCmd.Height + 6;
+			DownCmd.Top = DelCmd.Top + DelCmd.Height + 6;
+			ToBottomCmd.Top = DownCmd.Top + DownCmd.Height + 6;
+			#endregion
+		}
+		private void MainFrm_FormClosed(object sender, FormClosedEventArgs e) {
+			Library.SaveSettings();
+			Config.Instance.PlaylistList = PlaylistManager.PlaylistList;
+			Config.Instance.Save();
+			Log.AddStatusText("BooBox Server close by user.");
+			Log.CloseLog();
 		}
 		#endregion
 
@@ -378,131 +396,71 @@ namespace BooBoxServer {
 		}
 		#endregion
 
-		#region Form Event Handlers
-		private void MainFrm_Load(object sender, EventArgs e) {
-			Forms.MainFrm = this;
-			Log.AddStatusText("BooBox Server started.");
-			ToolStripManager.Renderer = new ToolStripProfessionalRenderer(new MenuStripNoGradient());
-			if (Config.Instance.Configured == false) {
-				Log.AddStatusText("No configuration file loaded. Assuming new installation. Starting the First Run Wizard.");
-				FirstRunFrm FirstRunFrm = new FirstRunFrm();
-				FirstRunFrm.ShowDialog();
-				ConfigLoaded = true;
-			} else {
-				ConfigLoaded = true;
-			}
-			Library.LoadSettings();
-			PlaylistManager.PlaylistList = Config.Instance.PlaylistList;
-			PushSettingsToForm();
-			PopulatePlaylistComb();
-			MusicLibraryDGV.ClearSelection();
-			CommInfo.StartListening();
-		}
-		private void MainFrm_Resize(object sender, EventArgs e) {
-			#region Horizontal Calculations
-			//LibraryGrp.Width = this.Width - 28;
-			//LibraryDGV.Width = LibraryGrp.Width - 12;
-			//PlaylistComb.Width = this.Width - 307;
-			//AddToPlaylistCmd.Left = this.Width - 289;
-			//DeletePlaylistCmd.Left = this.Width - 198;
-			//NewPlaylistCmd.Left = this.Width - 107;
-			//PlaylistGrp.Width = this.Width - 28;
-			//PlaylistDGV.Width = PlaylistGrp.Width - 51;
-			//ToTopCmd.Left = PlaylistGrp.Width - 39;
-			//UpCmd.Left = PlaylistGrp.Width - 39;
-			//DelCmd.Left = PlaylistGrp.Width - 39;
-			//DownCmd.Left = PlaylistGrp.Width - 39;
-			//ToBottomCmd.Left = PlaylistGrp.Width - 39;
-			#endregion
-			#region Vertical Calculations
-			// Exact Calculation: 0.3922480620155039
-			LibraryGrp.Height = Convert.ToInt32(this.Height * 0.3923);
-			//LibraryDGV.Height = LibraryGrp.Height - 26;
-			PlaylistComb.Top = LibraryGrp.Top + LibraryGrp.Height + 6;
-			AddToPlaylistCmd.Top = PlaylistComb.Top - 2;
-			DeletePlaylistCmd.Top = PlaylistComb.Top - 2;
-			NewPlaylistCmd.Top = PlaylistComb.Top - 2;
-			PlaylistGrp.Top = PlaylistComb.Top + 27;
-			PlaylistGrp.Height = this.Height - PlaylistGrp.Top - 65;
-			//PlaylistDGV.Height = PlaylistGrp.Height - 26;
-			// Exact Calculation: 0.2119815668202765
-			int PlaylistButtonHeight = Convert.ToInt32((PlaylistDGV.Height - 23) * 0.212);
-			ToTopCmd.Height = PlaylistButtonHeight;
-			UpCmd.Height = PlaylistButtonHeight;
-			// Exact Calculation: 0.152073732718894
-			DelCmd.Height = Convert.ToInt32((PlaylistDGV.Height - 23) * 0.1521);
-			DownCmd.Height = PlaylistButtonHeight;
-			ToBottomCmd.Height = PlaylistButtonHeight;
-			UpCmd.Top = ToTopCmd.Top + ToTopCmd.Height + 6;
-			DelCmd.Top = UpCmd.Top + UpCmd.Height + 6;
-			DownCmd.Top = DelCmd.Top + DelCmd.Height + 6;
-			ToBottomCmd.Top = DownCmd.Top + DownCmd.Height + 6;
-			#endregion
-		}
-		private void MainFrm_FormClosed(object sender, FormClosedEventArgs e) {
-			Library.SaveSettings();
-			Config.Instance.PlaylistList = PlaylistManager.PlaylistList;
-			Config.Instance.Save();
-			Log.AddStatusText("BooBox Server close by user.");
-			Log.CloseLog();
-		}
-		#endregion
-
-		private void DebugCmd_Click(object sender, EventArgs e) {
-			PlaylistManager.PrintPlaylistTree();
-		}
-
-		private void NewPlaylistCmd_Click(object sender, EventArgs e) {
-			InputBoxResult PlaylistRequestBox = InputBox.Show(
-				"Enter a name for your playlist:",
-				"Playlist Name Entry"
-			);
-			if (PlaylistRequestBox.ReturnCode == DialogResult.OK) {
-				if (PlaylistRequestBox.Text.Length > 200) {
-					MessageBox.Show("Playlist names may not be longer than 200 characters. Playlist has not been created.");
-				} else {
-					Log.AddStatusText("Created playlist: " + PlaylistRequestBox.Text);
-					Boolean playlistCreationSuccessful = PlaylistManager.CreatePlaylist(PlaylistRequestBox.Text);
-					if (playlistCreationSuccessful) {
-						PopulatePlaylistComb();
-					}
+		#region MusicLibraryDGV Event Handlers
+		private void MusicLibraryDGV_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e) {
+			MusicLibraryDGV.Columns[3].HeaderCell.SortGlyphDirection = SortOrder.None;
+			MusicLibraryDGV.Columns[4].HeaderCell.SortGlyphDirection = SortOrder.None;
+			MusicLibraryDGV.Columns[5].HeaderCell.SortGlyphDirection = SortOrder.None;
+			MusicLibraryDGV.Columns[7].HeaderCell.SortGlyphDirection = SortOrder.None;
+			MusicLibraryDGV.Columns[8].HeaderCell.SortGlyphDirection = SortOrder.None;
+			if (e.ColumnIndex == 3) {
+				#region Play Length Column
+				if (MusicLibraryDGV.SortOrder == SortOrder.Ascending) {
+					MusicLibraryDGV.Sort(MusicLibraryDGV.Columns[11], ListSortDirection.Descending);
+					MusicLibraryDGV.Columns[3].HeaderCell.SortGlyphDirection = SortOrder.Descending;
+				} else if (MusicLibraryDGV.SortOrder == SortOrder.Descending) {
+					MusicLibraryDGV.Sort(MusicLibraryDGV.Columns[11], ListSortDirection.Ascending);
+					MusicLibraryDGV.Columns[3].HeaderCell.SortGlyphDirection = SortOrder.Ascending;
 				}
+				#endregion
+			} else if (e.ColumnIndex == 4) {
+				#region File Length Column
+				if (MusicLibraryDGV.SortOrder == SortOrder.Ascending) {
+					MusicLibraryDGV.Sort(MusicLibraryDGV.Columns[12], ListSortDirection.Descending);
+					MusicLibraryDGV.Columns[4].HeaderCell.SortGlyphDirection = SortOrder.Descending;
+				} else if (MusicLibraryDGV.SortOrder == SortOrder.Descending) {
+					MusicLibraryDGV.Sort(MusicLibraryDGV.Columns[12], ListSortDirection.Ascending);
+					MusicLibraryDGV.Columns[4].HeaderCell.SortGlyphDirection = SortOrder.Ascending;
+				}
+				#endregion
+			} else if (e.ColumnIndex == 5) {
+				#region Play Count Column
+				if (MusicLibraryDGV.SortOrder == SortOrder.Ascending) {
+					MusicLibraryDGV.Sort(MusicLibraryDGV.Columns[13], ListSortDirection.Descending);
+					MusicLibraryDGV.Columns[5].HeaderCell.SortGlyphDirection = SortOrder.Descending;
+				} else if (MusicLibraryDGV.SortOrder == SortOrder.Descending) {
+					MusicLibraryDGV.Sort(MusicLibraryDGV.Columns[13], ListSortDirection.Ascending);
+					MusicLibraryDGV.Columns[5].HeaderCell.SortGlyphDirection = SortOrder.Ascending;
+				}
+				#endregion
+			} else if (e.ColumnIndex == 7) {
+				#region Track Column
+				if (MusicLibraryDGV.SortOrder == SortOrder.Ascending) {
+					MusicLibraryDGV.Sort(MusicLibraryDGV.Columns[14], ListSortDirection.Descending);
+					MusicLibraryDGV.Columns[7].HeaderCell.SortGlyphDirection = SortOrder.Descending;
+				} else if (MusicLibraryDGV.SortOrder == SortOrder.Descending) {
+					MusicLibraryDGV.Sort(MusicLibraryDGV.Columns[14], ListSortDirection.Ascending);
+					MusicLibraryDGV.Columns[7].HeaderCell.SortGlyphDirection = SortOrder.Ascending;
+				}
+				#endregion
+			} else if (e.ColumnIndex == 8) {
+				#region Year Column
+				if (MusicLibraryDGV.SortOrder == SortOrder.Ascending) {
+					MusicLibraryDGV.Sort(MusicLibraryDGV.Columns[15], ListSortDirection.Descending);
+					MusicLibraryDGV.Columns[8].HeaderCell.SortGlyphDirection = SortOrder.Descending;
+				} else if (MusicLibraryDGV.SortOrder == SortOrder.Descending) {
+					MusicLibraryDGV.Sort(MusicLibraryDGV.Columns[15], ListSortDirection.Ascending);
+					MusicLibraryDGV.Columns[8].HeaderCell.SortGlyphDirection = SortOrder.Ascending;
+				}
+				#endregion
 			}
 		}
-
-		private void PlaylistComb_SelectedIndexChanged(object sender, EventArgs e) {
-			DeletePlaylistCmd.Enabled = true;
-			if (MusicLibraryDGV.SelectedRows.Count > 0) { AddToPlaylistCmd.Enabled = true; }
-			if (PlaylistComb.SelectedIndex != -1) {
-				UpdatePlaylistDGV(PlaylistManager.GetPlaylistListByName(PlaylistComb.SelectedItem.ToString().Substring(0, PlaylistComb.SelectedItem.ToString().LastIndexOf(" ("))));
-			} else {
-				PlaylistDGV.Rows.Clear();
-			}
-		}
-
-		private void PlaylistComb_KeyPress(object sender, KeyPressEventArgs e) {
-			e.Handled = true;
-		}
-
-		private void DeletePlaylistCmd_Click(object sender, EventArgs e) {
-			PlaylistManager.DeletePlaylistByName(PlaylistComb.SelectedItem.ToString().Substring(0, PlaylistComb.SelectedItem.ToString().LastIndexOf(" (")));
-			PlaylistComb.SelectedIndex = -1;
-			PopulatePlaylistComb();
-		}
-
-		private void AddToPlaylistCmd_Click(object sender, EventArgs e) {
-			List<SongInfo> tempSIL = new List<SongInfo>();
-			for (int i = 0; i < MusicLibraryDGV.SelectedRows.Count; i++) {
-				tempSIL.Add((SongInfo)MusicLibraryDGV.SelectedRows[i].Tag);
-			}
-			PlaylistManager.AddSongInfoListToPlaylist(tempSIL, PlaylistComb.SelectedItem.ToString().Substring(0, PlaylistComb.SelectedItem.ToString().LastIndexOf(" (")));
-			UpdatePlaylistDGV(PlaylistManager.GetPlaylistListByName(PlaylistComb.SelectedItem.ToString().Substring(0, PlaylistComb.SelectedItem.ToString().LastIndexOf(" ("))));
-		}
-
 		private void MusicLibraryDGV_SelectionChanged(object sender, EventArgs e) {
 			if (PlaylistComb.SelectedIndex != -1) { AddToPlaylistCmd.Enabled = true; }
 		}
+		#endregion
 
+		#region PlaylistDGV Event Handlers
 		private void PlaylistDGV_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e) {
 			PlaylistDGV.Columns[4].HeaderCell.SortGlyphDirection = SortOrder.None;
 			PlaylistDGV.Columns[5].HeaderCell.SortGlyphDirection = SortOrder.None;
@@ -560,14 +518,176 @@ namespace BooBoxServer {
 				}
 				#endregion
 			}
-			List<SongInfo> tempSIL = new List<SongInfo>();
-			for (int i = 0; i < PlaylistDGV.RowCount; i++) {
-				tempSIL.Add((SongInfo)PlaylistDGV.Rows[i].Tag);
-				PlaylistDGV.Rows[i].Cells[0].Value = i;
+			SaveCurrentPlaylist();
+		}
+		private void PlaylistDGV_SelectionChanged(object sender, EventArgs e) {
+			if (PlaylistDGV.SelectedRows.Count > 0) {
+				ArrayList SelectionAL = new ArrayList();
+				for (int i = 0; i < PlaylistDGV.SelectedRows.Count; i++) { SelectionAL.Add(PlaylistDGV.SelectedRows[i].Index); }
+				SelectionAL.Sort();
+				UpCmd.Enabled = true;
+				ToTopCmd.Enabled = true;
+				DownCmd.Enabled = true;
+				ToBottomCmd.Enabled = true;
+				DelCmd.Enabled = true;
+				if ((int)SelectionAL[0] == 0) {
+					UpCmd.Enabled = false;
+					ToTopCmd.Enabled = false;
+				}
+				if ((int)SelectionAL[SelectionAL.Count - 1] == (PlaylistDGV.Rows.Count - 1)) {
+					DownCmd.Enabled = false;
+					ToBottomCmd.Enabled = false;
+				}
+			} else {
+				UpCmd.Enabled = false;
+				ToTopCmd.Enabled = false;
+				DownCmd.Enabled = false;
+				ToBottomCmd.Enabled = false;
+				DelCmd.Enabled = false;
 			}
-			PlaylistManager.OverwritePlaylistByName(tempSIL, PlaylistComb.SelectedItem.ToString().Substring(0, PlaylistComb.SelectedItem.ToString().LastIndexOf(" (")));
+		}
+		#endregion
+
+		#region PlaylistComb Event Handlers
+		private void PlaylistComb_SelectedIndexChanged(object sender, EventArgs e) {
+			DeletePlaylistCmd.Enabled = true;
+			if (MusicLibraryDGV.SelectedRows.Count > 0) { AddToPlaylistCmd.Enabled = true; }
+			if (PlaylistComb.SelectedIndex != -1) {
+				UpdatePlaylistDGV(PlaylistManager.GetPlaylistListByName(PlaylistComb.SelectedItem.ToString().Substring(0, PlaylistComb.SelectedItem.ToString().LastIndexOf(" ("))));
+				UpCmd.Enabled = false; ToTopCmd.Enabled = false; DownCmd.Enabled = true; ToBottomCmd.Enabled = true; DelCmd.Enabled = true;
+			} else {
+				PlaylistDGV.Rows.Clear();
+				UpCmd.Enabled = false; ToTopCmd.Enabled = false; DownCmd.Enabled = false; ToBottomCmd.Enabled = false; DelCmd.Enabled = false;
+			}
+		}
+		private void PlaylistComb_KeyPress(object sender, KeyPressEventArgs e) {
+			e.Handled = true;
+		}
+		#endregion
+
+		#region Playlist Button Event Handlers
+		private void NewPlaylistCmd_Click(object sender, EventArgs e) {
+			InputBoxResult PlaylistRequestBox = InputBox.Show(
+				"Enter a name for your playlist:",
+				"Playlist Name Entry"
+			);
+			if (PlaylistRequestBox.ReturnCode == DialogResult.OK) {
+				if (PlaylistRequestBox.Text.Length > 200) {
+					MessageBox.Show("Playlist names may not be longer than 200 characters. Playlist has not been created.");
+				} else {
+					Log.AddStatusText("Created playlist: " + PlaylistRequestBox.Text);
+					Boolean playlistCreationSuccessful = PlaylistManager.CreatePlaylist(PlaylistRequestBox.Text);
+					if (playlistCreationSuccessful) {
+						PopulatePlaylistComb();
+					}
+				}
+			}
+		}
+		private void DeletePlaylistCmd_Click(object sender, EventArgs e) {
+			PlaylistManager.DeletePlaylistByName(PlaylistComb.SelectedItem.ToString().Substring(0, PlaylistComb.SelectedItem.ToString().LastIndexOf(" (")));
+			PlaylistComb.SelectedIndex = -1;
+			PopulatePlaylistComb();
+		}
+		private void AddToPlaylistCmd_Click(object sender, EventArgs e) {
+			List<SongInfo> tempSIL = new List<SongInfo>();
+			for (int i = 0; i < MusicLibraryDGV.SelectedRows.Count; i++) {
+				tempSIL.Add((SongInfo)MusicLibraryDGV.SelectedRows[i].Tag);
+			}
+			PlaylistManager.AddSongInfoListToPlaylist(tempSIL, PlaylistComb.SelectedItem.ToString().Substring(0, PlaylistComb.SelectedItem.ToString().LastIndexOf(" (")));
+			UpdatePlaylistDGV(PlaylistManager.GetPlaylistListByName(PlaylistComb.SelectedItem.ToString().Substring(0, PlaylistComb.SelectedItem.ToString().LastIndexOf(" ("))));
+		}
+		private void ToTopCmd_Click(object sender, EventArgs e) {
+			ArrayList SelectionAL = new ArrayList();
+			for (int i = 0; i < PlaylistDGV.SelectedRows.Count; i++) { SelectionAL.Add(PlaylistDGV.SelectedRows[i].Index); }
+			SelectionAL.Sort();
+			int topIndex = (int)SelectionAL[0];
+			DataGridViewRow tempDGVR;
+			for (int i = SelectionAL.Count - 1; i > -1; i--) {
+				tempDGVR = PlaylistDGV.Rows[(int)SelectionAL[i]];
+				PlaylistDGV.Rows.RemoveAt((int)SelectionAL[i]);
+				PlaylistDGV.Rows.Insert(0, tempDGVR);
+			}
+			PlaylistDGV.ClearSelection();
+			for (int i = 0; i < SelectionAL.Count; i++) { PlaylistDGV.Rows[i].Selected = true; }
+			SaveCurrentPlaylist();
+		}
+		private void UpCmd_Click(object sender, EventArgs e) {
+			ArrayList SelectionAL = new ArrayList();
+			for (int i = 0; i < PlaylistDGV.SelectedRows.Count; i++) { SelectionAL.Add(PlaylistDGV.SelectedRows[i].Index); }
+			SelectionAL.Sort();
+			int topIndex = (int)SelectionAL[0];
+			DataGridViewRow tempDGVR;
+			for (int i = 0; i < SelectionAL.Count; i++) {
+				tempDGVR = PlaylistDGV.Rows[(int)SelectionAL[i]];
+				PlaylistDGV.Rows.RemoveAt((int)SelectionAL[i]);
+				PlaylistDGV.Rows.Insert((int)SelectionAL[i] - 1, tempDGVR);
+			}
+			PlaylistDGV.ClearSelection();
+			for (int i = 0; i < SelectionAL.Count; i++) { PlaylistDGV.Rows[(int)SelectionAL[i] - 1].Selected = true; }
+			SaveCurrentPlaylist();
+		}
+		private void DelCmd_Click(object sender, EventArgs e) {
+			ArrayList SelectionAL = new ArrayList();
+			for (int i = 0; i < PlaylistDGV.SelectedRows.Count; i++) { SelectionAL.Add(PlaylistDGV.SelectedRows[i].Index); }
+			SelectionAL.Sort();
+			int topIndex = (int)SelectionAL[0];
+			for (int i = SelectionAL.Count - 1; i > -1; i--) { PlaylistDGV.Rows.RemoveAt((int)SelectionAL[i]); }
+			SaveCurrentPlaylist();
+			int[] tempAttributeCount = PlaylistManager.GetAttributeCountByName(PlaylistComb.SelectedItem.ToString().Substring(0, PlaylistComb.SelectedItem.ToString().LastIndexOf(" (")));
+			PlaylistDGV.Columns[1].HeaderText = "Title (" + tempAttributeCount[0] + ")";
+			PlaylistDGV.Columns[2].HeaderText = "Artists (" + tempAttributeCount[1] + ")";
+			PlaylistDGV.Columns[3].HeaderText = "Album (" + tempAttributeCount[2] + ")";
+			if (PlaylistDGV.Rows.Count > 0) {
+				if (topIndex == 0) {
+					PlaylistDGV.CurrentCell = PlaylistDGV.Rows[0].Cells[0];
+				} else if (topIndex == PlaylistDGV.Rows.Count) {
+					PlaylistDGV.CurrentCell = PlaylistDGV.Rows[topIndex - 1].Cells[0];
+				} else {
+					PlaylistDGV.CurrentCell = PlaylistDGV.Rows[topIndex].Cells[0];
+				}
+			} else {
+				DelCmd.Enabled = false;
+			}
+		}
+		private void DownCmd_Click(object sender, EventArgs e) {
+			ArrayList SelectionAL = new ArrayList();
+			for (int i = 0; i < PlaylistDGV.SelectedRows.Count; i++) { SelectionAL.Add(PlaylistDGV.SelectedRows[i].Index); }
+			SelectionAL.Sort();
+			int topIndex = (int)SelectionAL[0];
+			DataGridViewRow tempDGVR;
+			for (int i = SelectionAL.Count - 1; i > -1; i--) {
+				tempDGVR = PlaylistDGV.Rows[(int)SelectionAL[i]];
+				PlaylistDGV.Rows.RemoveAt((int)SelectionAL[i]);
+				PlaylistDGV.Rows.Insert((int)SelectionAL[i] + 1, tempDGVR);
+			}
+			PlaylistDGV.ClearSelection();
+			for (int i = 0; i < SelectionAL.Count; i++) { PlaylistDGV.Rows[(int)SelectionAL[i] + 1].Selected = true; }
+			SaveCurrentPlaylist();
+		}
+		private void ToBottomCmd_Click(object sender, EventArgs e) {
+			ArrayList SelectionAL = new ArrayList();
+			for (int i = 0; i < PlaylistDGV.SelectedRows.Count; i++) { SelectionAL.Add(PlaylistDGV.SelectedRows[i].Index); }
+			SelectionAL.Sort();
+			int topIndex = (int)SelectionAL[0];
+			DataGridViewRow tempDGVR;
+			for (int i = 0; i < SelectionAL.Count; i++) {
+				tempDGVR = PlaylistDGV.Rows[(int)SelectionAL[i] - i];
+				PlaylistDGV.Rows.RemoveAt((int)SelectionAL[i] - i);
+				PlaylistDGV.Rows.Insert(PlaylistDGV.Rows.Count, tempDGVR);
+			}
+			PlaylistDGV.ClearSelection();
+			for (int i = 0; i < SelectionAL.Count; i++) { PlaylistDGV.Rows[PlaylistDGV.Rows.Count - 1 - i].Selected = true; }
+			SaveCurrentPlaylist();
+		}
+		#endregion
+
+		private void DebugCmd_Click(object sender, EventArgs e) {
+			PlaylistManager.PrintPlaylistTree();
 		}
 
+		private void PlaylistComb_Click(object sender, EventArgs e) {
+			PopulatePlaylistComb();
+		}
 
 	}
 }
