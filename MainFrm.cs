@@ -17,6 +17,7 @@ namespace BooBoxServer {
 
 		#region Form Variables
 		private Boolean ConfigLoaded = false;
+		private ContextMenu MusicLibraryCM = new ContextMenu();
 		#endregion
 
 		#region Form Functions
@@ -68,6 +69,32 @@ namespace BooBoxServer {
 			}
 			PlaylistManager.OverwritePlaylistByName(tempSIL, PlaylistComb.SelectedItem.ToString().Substring(0, PlaylistComb.SelectedItem.ToString().LastIndexOf(" (")));
 			PlaylistComb.Text = PlaylistComb.SelectedItem.ToString().Substring(0, PlaylistComb.SelectedItem.ToString().LastIndexOf(" (")) + " (" + PlaylistDGV.Rows.Count + ")";
+		}
+		private void UpdatePlaylistButtons() {
+			if (PlaylistDGV.SelectedRows.Count > 0) {
+				ArrayList SelectionAL = new ArrayList();
+				for (int i = 0; i < PlaylistDGV.SelectedRows.Count; i++) { SelectionAL.Add(PlaylistDGV.SelectedRows[i].Index); }
+				SelectionAL.Sort();
+				UpCmd.Enabled = true;
+				ToTopCmd.Enabled = true;
+				DownCmd.Enabled = true;
+				ToBottomCmd.Enabled = true;
+				DelCmd.Enabled = true;
+				if ((int)SelectionAL[0] == 0) {
+					UpCmd.Enabled = false;
+					ToTopCmd.Enabled = false;
+				}
+				if ((int)SelectionAL[SelectionAL.Count - 1] == (PlaylistDGV.Rows.Count - 1)) {
+					DownCmd.Enabled = false;
+					ToBottomCmd.Enabled = false;
+				}
+			} else {
+				UpCmd.Enabled = false;
+				ToTopCmd.Enabled = false;
+				DownCmd.Enabled = false;
+				ToBottomCmd.Enabled = false;
+				DelCmd.Enabled = false;
+			}
 		}
 		#endregion
 
@@ -180,6 +207,7 @@ namespace BooBoxServer {
 				PlaylistDGV.Columns[1].HeaderText = "Title (" + SongList.Count + ")";
 				PlaylistDGV.Columns[2].HeaderText = "Artists (" + artistCount + ")";
 				PlaylistDGV.Columns[3].HeaderText = "Album (" + albumCount + ")";
+				UpdatePlaylistButtons();
 			}
 		}
 		#endregion
@@ -189,6 +217,7 @@ namespace BooBoxServer {
 			Forms.MainFrm = this;
 			Log.AddStatusText("BooBox Server started.");
 			ToolStripManager.Renderer = new ToolStripProfessionalRenderer(new MenuStripNoGradient());
+			#region FirstRunFrm Stuff
 			if (Config.Instance.Configured == false) {
 				Log.AddStatusText("No configuration file loaded. Assuming new installation. Starting the First Run Wizard.");
 				FirstRunFrm FirstRunFrm = new FirstRunFrm();
@@ -197,6 +226,7 @@ namespace BooBoxServer {
 			} else {
 				ConfigLoaded = true;
 			}
+			#endregion
 			Library.LoadSettings();
 			PlaylistManager.PlaylistList = Config.Instance.PlaylistList;
 			PushSettingsToForm();
@@ -458,6 +488,67 @@ namespace BooBoxServer {
 		private void MusicLibraryDGV_SelectionChanged(object sender, EventArgs e) {
 			if (PlaylistComb.SelectedIndex != -1) { AddToPlaylistCmd.Enabled = true; }
 		}
+		private void MusicLibraryDGV_MouseUp(object sender, MouseEventArgs e) {
+			if (e.Button == MouseButtons.Right) {
+				MusicLibraryCM.MenuItems.Clear();
+				MenuItem[] tempAddBySongCMMI = new MenuItem[PlaylistManager.PlaylistList.Count];
+				for (int i = 0; i < PlaylistManager.PlaylistList.Count; i++) {
+					tempAddBySongCMMI[i] = new MenuItem();
+					tempAddBySongCMMI[i].Text = PlaylistManager.PlaylistList[i].Name;
+					tempAddBySongCMMI[i].Click += new EventHandler(AddBySongCMMI_Click);
+				}
+				if (MusicLibraryDGV.SelectedRows.Count == 1) {
+					MusicLibraryCM.MenuItems.Add("Add Selected Song To Playlist", tempAddBySongCMMI).Enabled = true;
+				} else if (MusicLibraryDGV.SelectedRows.Count > 1) {
+					MusicLibraryCM.MenuItems.Add("Add Selected Song(s) To Playlist", tempAddBySongCMMI).Enabled = true;
+				} else {
+					MusicLibraryCM.MenuItems.Add("Add Selected Song(s) To Playlist", tempAddBySongCMMI).Enabled = false;
+				}
+				MusicLibraryCM.MenuItems.Add("-");
+				if (MusicLibraryDGV.SelectedRows.Count == 1) {
+					MusicLibraryCM.MenuItems.Add("Select All By Selected Artist", new EventHandler(SelectAllByArtistCMMI_Click)).Enabled = true;
+					MusicLibraryCM.MenuItems.Add("Select All In Selected Album", new EventHandler(SelectAllInAlbumCMMI_Click)).Enabled = true;
+				} else {
+					MusicLibraryCM.MenuItems.Add("Select All By Selected Artist", new EventHandler(SelectAllByArtistCMMI_Click)).Enabled = false;
+					MusicLibraryCM.MenuItems.Add("Select All In Selected Album", new EventHandler(SelectAllInAlbumCMMI_Click)).Enabled = false;
+				}
+				MusicLibraryDGV.ContextMenu = MusicLibraryCM;
+				MusicLibraryCM.Show(MusicLibraryDGV, new Point(e.X, e.Y));
+			}
+		}
+		private void AddBySongCMMI_Click(object sender, EventArgs e) {
+			String playlistName = ((MenuItem)sender).Text;
+			List<SongInfo> tempSIL = new List<SongInfo>();
+			for (int i = 0; i < MusicLibraryDGV.SelectedRows.Count; i++) {
+				tempSIL.Add((SongInfo)MusicLibraryDGV.SelectedRows[i].Tag);
+			}
+			int successfulCount = PlaylistManager.AddSongInfoListToPlaylist(tempSIL, playlistName);
+			UpdatePlaylistDGV(PlaylistManager.GetPlaylistListByName(playlistName));
+			UpdateStatusLabel("Added " + successfulCount + " songs to the \"" + playlistName + "\" playlist.");
+		}
+		private void SelectAllByArtistCMMI_Click(object sender, EventArgs e) {
+			String tempCompare = MusicLibraryDGV.SelectedRows[0].Cells[1].Value.ToString();
+			Console.WriteLine(tempCompare.ToString());
+			for (int i = 0; i < MusicLibraryDGV.Rows.Count; i++) {
+				if (MusicLibraryDGV.Rows[i].Cells[1].Value != null) {
+					if (MusicLibraryDGV.Rows[i].Cells[1].Value.ToString() == tempCompare) {
+						MusicLibraryDGV.Rows[i].Selected = true;
+					}
+				}
+			}
+		}
+		private void SelectAllInAlbumCMMI_Click(object sender, EventArgs e) {
+			String tempCompare = MusicLibraryDGV.SelectedRows[0].Cells[2].Value.ToString();
+			Console.WriteLine(tempCompare.ToString());
+			for (int i = 0; i < MusicLibraryDGV.Rows.Count; i++) {
+				if (MusicLibraryDGV.Rows[i].Cells[2].Value != null) {
+					if (MusicLibraryDGV.Rows[i].Cells[2].Value.ToString() == tempCompare) {
+						MusicLibraryDGV.Rows[i].Selected = true;
+					}
+				}
+			}
+
+		}
 		#endregion
 
 		#region PlaylistDGV Event Handlers
@@ -521,30 +612,7 @@ namespace BooBoxServer {
 			SaveCurrentPlaylist();
 		}
 		private void PlaylistDGV_SelectionChanged(object sender, EventArgs e) {
-			if (PlaylistDGV.SelectedRows.Count > 0) {
-				ArrayList SelectionAL = new ArrayList();
-				for (int i = 0; i < PlaylistDGV.SelectedRows.Count; i++) { SelectionAL.Add(PlaylistDGV.SelectedRows[i].Index); }
-				SelectionAL.Sort();
-				UpCmd.Enabled = true;
-				ToTopCmd.Enabled = true;
-				DownCmd.Enabled = true;
-				ToBottomCmd.Enabled = true;
-				DelCmd.Enabled = true;
-				if ((int)SelectionAL[0] == 0) {
-					UpCmd.Enabled = false;
-					ToTopCmd.Enabled = false;
-				}
-				if ((int)SelectionAL[SelectionAL.Count - 1] == (PlaylistDGV.Rows.Count - 1)) {
-					DownCmd.Enabled = false;
-					ToBottomCmd.Enabled = false;
-				}
-			} else {
-				UpCmd.Enabled = false;
-				ToTopCmd.Enabled = false;
-				DownCmd.Enabled = false;
-				ToBottomCmd.Enabled = false;
-				DelCmd.Enabled = false;
-			}
+			UpdatePlaylistButtons();
 		}
 		#endregion
 
@@ -563,6 +631,9 @@ namespace BooBoxServer {
 		}
 		private void PlaylistComb_KeyPress(object sender, KeyPressEventArgs e) {
 			e.Handled = true;
+		}
+		private void PlaylistComb_Click(object sender, EventArgs e) {
+			PopulatePlaylistComb();
 		}
 		#endregion
 
@@ -595,9 +666,9 @@ namespace BooBoxServer {
 			for (int i = 0; i < MusicLibraryDGV.SelectedRows.Count; i++) {
 				tempSIL.Add((SongInfo)MusicLibraryDGV.SelectedRows[i].Tag);
 			}
-			PlaylistManager.AddSongInfoListToPlaylist(tempSIL, PlaylistComb.SelectedItem.ToString().Substring(0, PlaylistComb.SelectedItem.ToString().LastIndexOf(" (")));
+			int successfulCount = PlaylistManager.AddSongInfoListToPlaylist(tempSIL, PlaylistComb.SelectedItem.ToString().Substring(0, PlaylistComb.SelectedItem.ToString().LastIndexOf(" (")));
 			UpdatePlaylistDGV(PlaylistManager.GetPlaylistListByName(PlaylistComb.SelectedItem.ToString().Substring(0, PlaylistComb.SelectedItem.ToString().LastIndexOf(" ("))));
-			UpdateStatusLabel("Added " + tempSIL.Count + " songs to the \"" + PlaylistComb.SelectedItem.ToString().Substring(0, PlaylistComb.SelectedItem.ToString().LastIndexOf(" (")) + "\" playlist.");
+			UpdateStatusLabel("Added " + successfulCount + " songs to the \"" + PlaylistComb.SelectedItem.ToString().Substring(0, PlaylistComb.SelectedItem.ToString().LastIndexOf(" (")) + "\" playlist.");
 		}
 		private void ToTopCmd_Click(object sender, EventArgs e) {
 			ArrayList SelectionAL = new ArrayList();
@@ -686,10 +757,6 @@ namespace BooBoxServer {
 
 		private void DebugCmd_Click(object sender, EventArgs e) {
 			PlaylistManager.PrintPlaylistTree();
-		}
-
-		private void PlaylistComb_Click(object sender, EventArgs e) {
-			PopulatePlaylistComb();
 		}
 
 	}
