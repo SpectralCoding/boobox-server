@@ -63,6 +63,10 @@ namespace BooBoxServer {
 			ParseMessage(Data);
 		}
 
+		/// <summary>
+		/// Parses a line of incomming data.
+		/// </summary>
+		/// <param name="Data">Data to parse and execute</param>
 		public void ParseMessage(String Data) {
 			char[] spaceDelim = new char[] { ' ' };
 			String[] tokenData = Data.Split(spaceDelim, 2);
@@ -153,6 +157,10 @@ namespace BooBoxServer {
 			}
 		}
 
+		/// <summary>
+		/// Creates a list of ServerDetail objects related to the server.
+		/// </summary>
+		/// <returns>List of ServerDetail objects with Name and Value pairs</returns>
 		private List<ServerDetail> GenerateDetailList() {
 			List<ServerDetail> tempDetailList = new List<ServerDetail>();
 			ServerDetail tempServerDetail = new ServerDetail();
