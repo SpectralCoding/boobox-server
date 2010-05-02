@@ -13,11 +13,11 @@ using BooBox;
 namespace BooBoxServer {
 	public partial class MainFrm : Form {
 
-		// TODO: Save window state and size between sessions.
-
 		#region Form Variables
+		private Boolean DisablePlaylistButtonUpdating = false;
 		private Boolean ConfigLoaded = false;
 		private ContextMenu MusicLibraryCM = new ContextMenu();
+		private ContextMenu PlaylistCM = new ContextMenu();
 		#endregion
 
 		#region Form Functions
@@ -41,29 +41,31 @@ namespace BooBoxServer {
 			PlaylistComb.Text = PlaylistComb.SelectedItem.ToString().Substring(0, PlaylistComb.SelectedItem.ToString().LastIndexOf(" (")) + " (" + PlaylistDGV.Rows.Count + ")";
 		}
 		private void UpdatePlaylistButtons() {
-			if (PlaylistDGV.SelectedRows.Count > 0) {
-				ArrayList SelectionAL = new ArrayList();
-				for (int i = 0; i < PlaylistDGV.SelectedRows.Count; i++) { SelectionAL.Add(PlaylistDGV.SelectedRows[i].Index); }
-				SelectionAL.Sort();
-				UpCmd.Enabled = true;
-				ToTopCmd.Enabled = true;
-				DownCmd.Enabled = true;
-				ToBottomCmd.Enabled = true;
-				DelCmd.Enabled = true;
-				if ((int)SelectionAL[0] == 0) {
+			if (DisablePlaylistButtonUpdating == false) {
+				if (PlaylistDGV.SelectedRows.Count > 0) {
+					ArrayList SelectionAL = new ArrayList();
+					for (int i = 0; i < PlaylistDGV.SelectedRows.Count; i++) { SelectionAL.Add(PlaylistDGV.SelectedRows[i].Index); }
+					SelectionAL.Sort();
+					UpCmd.Enabled = true;
+					ToTopCmd.Enabled = true;
+					DownCmd.Enabled = true;
+					ToBottomCmd.Enabled = true;
+					DelCmd.Enabled = true;
+					if ((int)SelectionAL[0] == 0) {
+						UpCmd.Enabled = false;
+						ToTopCmd.Enabled = false;
+					}
+					if ((int)SelectionAL[SelectionAL.Count - 1] == (PlaylistDGV.Rows.Count - 1)) {
+						DownCmd.Enabled = false;
+						ToBottomCmd.Enabled = false;
+					}
+				} else {
 					UpCmd.Enabled = false;
 					ToTopCmd.Enabled = false;
-				}
-				if ((int)SelectionAL[SelectionAL.Count - 1] == (PlaylistDGV.Rows.Count - 1)) {
 					DownCmd.Enabled = false;
 					ToBottomCmd.Enabled = false;
+					DelCmd.Enabled = false;
 				}
-			} else {
-				UpCmd.Enabled = false;
-				ToTopCmd.Enabled = false;
-				DownCmd.Enabled = false;
-				ToBottomCmd.Enabled = false;
-				DelCmd.Enabled = false;
 			}
 		}
 		#endregion
@@ -219,6 +221,9 @@ namespace BooBoxServer {
 
 		#region Form Event Handlers
 		private void MainFrm_Load(object sender, EventArgs e) {
+			this.WindowState = Config.Instance.MainFrmWindowState;
+			this.Width = Config.Instance.MainFrmWindowSizeWidth;
+			this.Height = Config.Instance.MainFrmWindowSizeHeight;
 			Forms.MainFrm = this;
 			Log.AddStatusText("BooBox Server started.");
 			ToolStripManager.Renderer = new ToolStripProfessionalRenderer(new MenuStripNoGradient());
@@ -262,7 +267,10 @@ namespace BooBoxServer {
 			ToBottomCmd.Top = DownCmd.Top + DownCmd.Height + 6;
 			#endregion
 		}
-		private void MainFrm_FormClosed(object sender, FormClosedEventArgs e) {
+		private void MainFrm_FormClosing(object sender, FormClosingEventArgs e) {
+			Config.Instance.MainFrmWindowState = this.WindowState;
+			Config.Instance.MainFrmWindowSizeWidth = this.Width;
+			Config.Instance.MainFrmWindowSizeHeight = this.Height;
 			Library.SaveSettings();
 			Config.Instance.PlaylistList = PlaylistManager.PlaylistList;
 			Config.Instance.Save();
@@ -482,44 +490,44 @@ namespace BooBoxServer {
 				for (int i = 0; i < PlaylistManager.PlaylistList.Count; i++) {
 					tempAddBySongCMMI[i] = new MenuItem();
 					tempAddBySongCMMI[i].Text = PlaylistManager.PlaylistList[i].Name;
-					tempAddBySongCMMI[i].Click += new EventHandler(AddBySongCMMI_Click);
+					tempAddBySongCMMI[i].Click += new EventHandler(AddBySongMLCMMI_Click);
 				}
 				if (MusicLibraryDGV.SelectedRows.Count == 1) {
-					MusicLibraryCM.MenuItems.Add("View Extended Song Info", new EventHandler(ViewExtendedSongInfoCMMI_Click)).Enabled = true;
+					MusicLibraryCM.MenuItems.Add("View Extended Song Info", new EventHandler(ViewExtendedSongInfoMLCMMI_Click)).Enabled = true;
 					MusicLibraryCM.MenuItems.Add("-");
 					MusicLibraryCM.MenuItems.Add("Add Selected Song To Playlist", tempAddBySongCMMI).Enabled = true;
 				} else if (MusicLibraryDGV.SelectedRows.Count > 1) {
-					MusicLibraryCM.MenuItems.Add("View Extended Song Info", new EventHandler(ViewExtendedSongInfoCMMI_Click)).Enabled = false;
+					MusicLibraryCM.MenuItems.Add("View Extended Song Info", new EventHandler(ViewExtendedSongInfoMLCMMI_Click)).Enabled = false;
 					MusicLibraryCM.MenuItems.Add("-");
 					MusicLibraryCM.MenuItems.Add("Add Selected Songs To Playlist", tempAddBySongCMMI).Enabled = true;
 				} else {
-					MusicLibraryCM.MenuItems.Add("View Extended Song Info", new EventHandler(ViewExtendedSongInfoCMMI_Click)).Enabled = false;
+					MusicLibraryCM.MenuItems.Add("View Extended Song Info", new EventHandler(ViewExtendedSongInfoMLCMMI_Click)).Enabled = false;
 					MusicLibraryCM.MenuItems.Add("-");
 					MusicLibraryCM.MenuItems.Add("Add Selected Song(s) To Playlist", tempAddBySongCMMI).Enabled = false;
 				}
 				MusicLibraryCM.MenuItems.Add("-");
 				if (MusicLibraryDGV.SelectedRows.Count == 1) {
-					MusicLibraryCM.MenuItems.Add("Select All By Selected Artist", new EventHandler(SelectAllByArtistCMMI_Click)).Enabled = true;
-					MusicLibraryCM.MenuItems.Add("Select All In Selected Album", new EventHandler(SelectAllInAlbumCMMI_Click)).Enabled = true;
-					MusicLibraryCM.MenuItems.Add("Select All In Selected Song's Folder", new EventHandler(SelectAllInFolderCMMI_Click)).Enabled = true;
-					MusicLibraryCM.MenuItems.Add("Select All Matching Selected Song's Genre", new EventHandler(SelectAllInGenreCMMI_Click)).Enabled = true;
+					MusicLibraryCM.MenuItems.Add("Select All By Selected Artist", new EventHandler(SelectAllByArtistMLCMMI_Click)).Enabled = true;
+					MusicLibraryCM.MenuItems.Add("Select All In Selected Album", new EventHandler(SelectAllInAlbumMLCMMI_Click)).Enabled = true;
+					MusicLibraryCM.MenuItems.Add("Select All In Selected Song's Folder", new EventHandler(SelectAllInFolderMLCMMI_Click)).Enabled = true;
+					MusicLibraryCM.MenuItems.Add("Select All Matching Selected Song's Genre", new EventHandler(SelectAllInGenreMLCMMI_Click)).Enabled = true;
 				} else {
-					MusicLibraryCM.MenuItems.Add("Select All By Selected Artist", new EventHandler(SelectAllByArtistCMMI_Click)).Enabled = false;
-					MusicLibraryCM.MenuItems.Add("Select All In Selected Album", new EventHandler(SelectAllInAlbumCMMI_Click)).Enabled = false;
-					MusicLibraryCM.MenuItems.Add("Select All In Selected Song's Folder", new EventHandler(SelectAllInFolderCMMI_Click)).Enabled = false;
-					MusicLibraryCM.MenuItems.Add("Select All Matching Selected Song's Genre", new EventHandler(SelectAllInGenreCMMI_Click)).Enabled = false;
+					MusicLibraryCM.MenuItems.Add("Select All By Selected Artist", new EventHandler(SelectAllByArtistMLCMMI_Click)).Enabled = false;
+					MusicLibraryCM.MenuItems.Add("Select All In Selected Album", new EventHandler(SelectAllInAlbumMLCMMI_Click)).Enabled = false;
+					MusicLibraryCM.MenuItems.Add("Select All In Selected Song's Folder", new EventHandler(SelectAllInFolderMLCMMI_Click)).Enabled = false;
+					MusicLibraryCM.MenuItems.Add("Select All Matching Selected Song's Genre", new EventHandler(SelectAllInGenreMLCMMI_Click)).Enabled = false;
 				}
 				MusicLibraryCM.MenuItems.Add("-");
 				if (MusicLibraryDGV.SelectedRows.Count == 0) {
-					MusicLibraryCM.MenuItems.Add("Clear Selection", new EventHandler(ClearSelectionCMMI_Click)).Enabled = false;
+					MusicLibraryCM.MenuItems.Add("Clear Selection", new EventHandler(ClearSelectionMLCMMI_Click)).Enabled = false;
 				} else {
-					MusicLibraryCM.MenuItems.Add("Clear Selection", new EventHandler(ClearSelectionCMMI_Click)).Enabled = true;
+					MusicLibraryCM.MenuItems.Add("Clear Selection", new EventHandler(ClearSelectionMLCMMI_Click)).Enabled = true;
 				}
 				MusicLibraryDGV.ContextMenu = MusicLibraryCM;
 				MusicLibraryCM.Show(MusicLibraryDGV, new Point(e.X, e.Y));
 			}
 		}
-		private void ViewExtendedSongInfoCMMI_Click(object sender, EventArgs e) {
+		private void ViewExtendedSongInfoMLCMMI_Click(object sender, EventArgs e) {
 			SongInfo tempSongInfo = (SongInfo)MusicLibraryDGV.SelectedRows[0].Tag;
 			MessageBox.Show(
 				"Extended Song Information\n" +
@@ -540,7 +548,7 @@ namespace BooBoxServer {
 				"Audio Data Range: " + Functions.BytesToHumanReadable(tempSongInfo.StartByte, 3) + " - " + Functions.BytesToHumanReadable(tempSongInfo.EndByte, 3) + "\n"
 			);
 		}
-		private void AddBySongCMMI_Click(object sender, EventArgs e) {
+		private void AddBySongMLCMMI_Click(object sender, EventArgs e) {
 			String playlistName = ((MenuItem)sender).Text;
 			List<SongInfo> tempSIL = new List<SongInfo>();
 			for (int i = 0; i < MusicLibraryDGV.SelectedRows.Count; i++) {
@@ -550,7 +558,7 @@ namespace BooBoxServer {
 			UpdatePlaylistDGV(PlaylistManager.GetPlaylistListByName(playlistName));
 			UpdateStatusLabel("Added " + successfulCount + " songs (" + (tempSIL.Count - successfulCount) + " duplicates skipped) to the \"" + playlistName + "\" playlist.");
 		}
-		private void SelectAllByArtistCMMI_Click(object sender, EventArgs e) {
+		private void SelectAllByArtistMLCMMI_Click(object sender, EventArgs e) {
 			String tempCompare = MusicLibraryDGV.SelectedRows[0].Cells[1].Value.ToString();
 			for (int i = 0; i < MusicLibraryDGV.Rows.Count; i++) {
 				if (MusicLibraryDGV.Rows[i].Cells[1].Value != null) {
@@ -560,7 +568,7 @@ namespace BooBoxServer {
 				}
 			}
 		}
-		private void SelectAllInAlbumCMMI_Click(object sender, EventArgs e) {
+		private void SelectAllInAlbumMLCMMI_Click(object sender, EventArgs e) {
 			String tempCompare = MusicLibraryDGV.SelectedRows[0].Cells[2].Value.ToString();
 			for (int i = 0; i < MusicLibraryDGV.Rows.Count; i++) {
 				if (MusicLibraryDGV.Rows[i].Cells[2].Value != null) {
@@ -570,10 +578,9 @@ namespace BooBoxServer {
 				}
 			}
 		}
-		private void SelectAllInFolderCMMI_Click(object sender, EventArgs e) {
+		private void SelectAllInFolderMLCMMI_Click(object sender, EventArgs e) {
 			String tempCompare = MusicLibraryDGV.SelectedRows[0].Cells[10].Value.ToString();
 			tempCompare = System.IO.Path.GetDirectoryName(tempCompare);
-			Console.WriteLine(tempCompare);
 			for (int i = 0; i < MusicLibraryDGV.Rows.Count; i++) {
 				if (MusicLibraryDGV.Rows[i].Cells[10].Value != null) {
 					if (System.IO.Path.GetDirectoryName(MusicLibraryDGV.Rows[i].Cells[10].Value.ToString()) == tempCompare) {
@@ -582,11 +589,10 @@ namespace BooBoxServer {
 				}
 			}
 		}
-		private void SelectAllInGenreCMMI_Click(object sender, EventArgs e) {
+		private void SelectAllInGenreMLCMMI_Click(object sender, EventArgs e) {
 			String[] strSplit = new String[] { "; " };
 			String[] srcGenres = MusicLibraryDGV.SelectedRows[0].Cells[6].Value.ToString().Split(strSplit, StringSplitOptions.RemoveEmptyEntries);
 			String[] testGenres;
-			foreach (String temp in srcGenres) { Console.WriteLine("-" + temp + "-"); }
 			for (int i = 0; i < MusicLibraryDGV.Rows.Count; i++) {
 				if (MusicLibraryDGV.Rows[i].Cells[6].Value != null) {
 					testGenres = MusicLibraryDGV.Rows[i].Cells[6].Value.ToString().Split(strSplit, StringSplitOptions.RemoveEmptyEntries);
@@ -601,7 +607,7 @@ namespace BooBoxServer {
 				}
 			}
 		}
-		private void ClearSelectionCMMI_Click(object sender, EventArgs e) {
+		private void ClearSelectionMLCMMI_Click(object sender, EventArgs e) {
 			MusicLibraryDGV.ClearSelection();
 			AddToPlaylistCmd.Enabled = false;
 		}
@@ -670,6 +676,126 @@ namespace BooBoxServer {
 		private void PlaylistDGV_SelectionChanged(object sender, EventArgs e) {
 			UpdatePlaylistButtons();
 			PlaylistGrp.Text = "Playlist (" + PlaylistDGV.SelectedRows.Count + " Selected)";
+		}
+		private void PlaylistDGV_MouseUp(object sender, MouseEventArgs e) {
+			if (e.Button == MouseButtons.Right) {
+				PlaylistCM.MenuItems.Clear();
+				if (PlaylistDGV.SelectedRows.Count == 1) {
+					PlaylistCM.MenuItems.Add("View Extended Song Info", new EventHandler(ViewExtendedSongInfoPLCMMI_Click)).Enabled = true;
+					PlaylistCM.MenuItems.Add("-");
+				} else if (PlaylistDGV.SelectedRows.Count > 1) {
+					PlaylistCM.MenuItems.Add("View Extended Song Info", new EventHandler(ViewExtendedSongInfoPLCMMI_Click)).Enabled = false;
+					PlaylistCM.MenuItems.Add("-");
+				} else {
+					PlaylistCM.MenuItems.Add("View Extended Song Info", new EventHandler(ViewExtendedSongInfoPLCMMI_Click)).Enabled = false;
+					PlaylistCM.MenuItems.Add("-");
+				}
+				PlaylistCM.MenuItems.Add("-");
+				if (PlaylistDGV.SelectedRows.Count == 1) {
+					PlaylistCM.MenuItems.Add("Select All By Selected Artist", new EventHandler(SelectAllByArtistPLCMMI_Click)).Enabled = true;
+					PlaylistCM.MenuItems.Add("Select All In Selected Album", new EventHandler(SelectAllInAlbumPLCMMI_Click)).Enabled = true;
+					PlaylistCM.MenuItems.Add("Select All In Selected Song's Folder", new EventHandler(SelectAllInFolderPLCMMI_Click)).Enabled = true;
+					PlaylistCM.MenuItems.Add("Select All Matching Selected Song's Genre", new EventHandler(SelectAllInGenrePLCMMI_Click)).Enabled = true;
+				} else {
+					PlaylistCM.MenuItems.Add("Select All By Selected Artist", new EventHandler(SelectAllByArtistPLCMMI_Click)).Enabled = false;
+					PlaylistCM.MenuItems.Add("Select All In Selected Album", new EventHandler(SelectAllInAlbumPLCMMI_Click)).Enabled = false;
+					PlaylistCM.MenuItems.Add("Select All In Selected Song's Folder", new EventHandler(SelectAllInFolderPLCMMI_Click)).Enabled = false;
+					PlaylistCM.MenuItems.Add("Select All Matching Selected Song's Genre", new EventHandler(SelectAllInGenrePLCMMI_Click)).Enabled = false;
+				}
+				PlaylistCM.MenuItems.Add("-");
+				if (PlaylistDGV.SelectedRows.Count == 0) {
+					PlaylistCM.MenuItems.Add("Clear Selection", new EventHandler(ClearSelectionPLCMMI_Click)).Enabled = false;
+				} else {
+					PlaylistCM.MenuItems.Add("Clear Selection", new EventHandler(ClearSelectionPLCMMI_Click)).Enabled = true;
+				}
+				PlaylistDGV.ContextMenu = PlaylistCM;
+				PlaylistCM.Show(PlaylistDGV, new Point(e.X, e.Y));
+			}
+		}
+		private void ViewExtendedSongInfoPLCMMI_Click(object sender, EventArgs e) {
+			SongInfo tempSongInfo = (SongInfo)PlaylistDGV.SelectedRows[0].Tag;
+			MessageBox.Show(
+				"Extended Song Information\n" +
+				"\n" +
+				"Title: " + tempSongInfo.Title + "\n" +
+				"Artist(s): " + Functions.StringArrToDelimitedStr(tempSongInfo.AlbumArtists, "; ") + "\n" +
+				"Album: " + tempSongInfo.Album + "\n" +
+				"Length: " + Functions.MillisecondsToHumanReadable(tempSongInfo.PlayLength) + "\n" +
+				"Track: " + tempSongInfo.Track.ToString() + " of " + tempSongInfo.TrackCount.ToString() + "\n" +
+				"Year: " + tempSongInfo.Year + "\n" +
+				"Bitrate: " + tempSongInfo.BitRate.ToString() + "kbps\n" +
+				"Genre(s): " + Functions.StringArrToDelimitedStr(tempSongInfo.Genres, "; ") + "\n" +
+				"Comment: " + tempSongInfo.Comment + "\n" +
+				"Play Count: " + tempSongInfo.PlayCount + "\n" +
+				"Filename: " + tempSongInfo.FileName + "\n" +
+				"Filesize: " + Functions.BytesToHumanReadable(tempSongInfo.FileLength, 3) + "\n" +
+				"Metadata Size: " + Functions.BytesToHumanReadable(tempSongInfo.StartByte, 3) + "\n" +
+				"Audio Data Range: " + Functions.BytesToHumanReadable(tempSongInfo.StartByte, 3) + " - " + Functions.BytesToHumanReadable(tempSongInfo.EndByte, 3) + "\n"
+			);
+		}
+		private void SelectAllByArtistPLCMMI_Click(object sender, EventArgs e) {
+			DisablePlaylistButtonUpdating = true;
+			String tempCompare = PlaylistDGV.SelectedRows[0].Cells[2].Value.ToString();
+			for (int i = 0; i < PlaylistDGV.Rows.Count; i++) {
+				if (PlaylistDGV.Rows[i].Cells[2].Value != null) {
+					if (PlaylistDGV.Rows[i].Cells[2].Value.ToString() == tempCompare) {
+						PlaylistDGV.Rows[i].Selected = true;
+					}
+				}
+			}
+			DisablePlaylistButtonUpdating = false;
+			UpdatePlaylistButtons();
+		}
+		private void SelectAllInAlbumPLCMMI_Click(object sender, EventArgs e) {
+			DisablePlaylistButtonUpdating = true;
+			String tempCompare = PlaylistDGV.SelectedRows[0].Cells[3].Value.ToString();
+			for (int i = 0; i < PlaylistDGV.Rows.Count; i++) {
+				if (PlaylistDGV.Rows[i].Cells[3].Value != null) {
+					if (PlaylistDGV.Rows[i].Cells[3].Value.ToString() == tempCompare) {
+						PlaylistDGV.Rows[i].Selected = true;
+					}
+				}
+			}
+			DisablePlaylistButtonUpdating = false;
+			UpdatePlaylistButtons();
+		}
+		private void SelectAllInFolderPLCMMI_Click(object sender, EventArgs e) {
+			DisablePlaylistButtonUpdating = true;
+			String tempCompare = PlaylistDGV.SelectedRows[0].Cells[11].Value.ToString();
+			tempCompare = System.IO.Path.GetDirectoryName(tempCompare);
+			for (int i = 0; i < PlaylistDGV.Rows.Count; i++) {
+				if (PlaylistDGV.Rows[i].Cells[11].Value != null) {
+					if (System.IO.Path.GetDirectoryName(PlaylistDGV.Rows[i].Cells[11].Value.ToString()) == tempCompare) {
+						PlaylistDGV.Rows[i].Selected = true;
+					}
+				}
+			}
+			DisablePlaylistButtonUpdating = false;
+			UpdatePlaylistButtons();
+		}
+		private void SelectAllInGenrePLCMMI_Click(object sender, EventArgs e) {
+			DisablePlaylistButtonUpdating = true;
+			String[] strSplit = new String[] { "; " };
+			String[] srcGenres = PlaylistDGV.SelectedRows[0].Cells[7].Value.ToString().Split(strSplit, StringSplitOptions.RemoveEmptyEntries);
+			String[] testGenres;
+			for (int i = 0; i < PlaylistDGV.Rows.Count; i++) {
+				if (PlaylistDGV.Rows[i].Cells[7].Value != null) {
+					testGenres = PlaylistDGV.Rows[i].Cells[7].Value.ToString().Split(strSplit, StringSplitOptions.RemoveEmptyEntries);
+					for (int x = 0; x < testGenres.Length; x++) {
+						for (int y = 0; y < srcGenres.Length; y++) {
+							if (testGenres[x] == srcGenres[y]) {
+								PlaylistDGV.Rows[i].Selected = true;
+								break;
+							}
+						}
+					}
+				}
+			}
+			DisablePlaylistButtonUpdating = false;
+			UpdatePlaylistButtons();
+		}
+		private void ClearSelectionPLCMMI_Click(object sender, EventArgs e) {
+			PlaylistDGV.ClearSelection();
 		}
 		#endregion
 

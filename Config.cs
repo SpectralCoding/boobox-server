@@ -6,10 +6,14 @@ using System.Text;
 using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
+using System.Windows.Forms;
 using BooBox;
 
 namespace BooBoxServer {
 	public sealed class Config {
+		public FormWindowState MainFrmWindowState = FormWindowState.Normal;
+		public int MainFrmWindowSizeWidth = 727;
+		public int MainFrmWindowSizeHeight = 645;
 		public int CommInfoPort = 1337;
 		public int CommStreamPort = 1338;
 		public String ServerName = "";
