@@ -36,6 +36,7 @@ namespace BooBoxServer {
 				#region Step 2: Server Name
 				TitleLbl.Text = "Step 2: Server Name";
 				DescriptionLbl.Text = "Your BooBox Server Name will be used to uniquely identify your server to it's users. Try to choose a name that is unique and adequately describes your server's contents.\n\nExamples:\n\"Joe's Classic Rock Server\"\n\"Mark's General Music Server\"\n\nEnter a server name below and click 'Next':";
+				InputOneTxt.UseSystemPasswordChar = false;
 				InputOneTxt.Text = tempServerName;
 				InputOneTxt.Top = 175; InputOneTxt.Left = 154; InputOneTxt.Width = 318;
 				InputOneTxt.Visible = true;
@@ -59,6 +60,7 @@ namespace BooBoxServer {
 					CheckBox.Checked = tempServerPasswordChk;
 					InputOneTxt.Text = tempServerPassword;
 					InputOneTxt.Enabled = CheckBox.Checked;
+					InputOneTxt.UseSystemPasswordChar = true;
 					CheckBox.Visible = true;
 					InputOneTxt.Visible = true;
 				}
@@ -80,6 +82,7 @@ namespace BooBoxServer {
 				} else {
 					TitleLbl.Text = "Step 4: Listening Ports";
 					DescriptionLbl.Text = "Your BooBox Server will need to listen for incomming connections on certain ports. If you go through a router or other such device it will be necessary to forward these ports to your computer before your clients can successfully connect to your server.\n\nTwo ports are required:\n1) Information Port, and\n2) Transfer Port\n\nPlease specify the ports below and click 'Next':\n\n\nInformation Port:\n\n    Transfer Port:";
+					InputOneTxt.UseSystemPasswordChar = false;
 					InputOneTxt.Text = tempPortInfo.ToString();
 					InputTwoTxt.Text = tempPortTrans.ToString();
 					InputOneTxt.Top = 200; InputOneTxt.Width = 100; InputOneTxt.Left = 237;

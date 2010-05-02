@@ -10,6 +10,7 @@ using BooBox;
 
 namespace BooBoxServer {
 	public static class Library {
+
 		private static ArrayList FolderList = new ArrayList();
 		private static List<SongInfo> SongList = new List<SongInfo>();
 		private static DateTime iLastEditDataTime;
@@ -65,7 +66,7 @@ namespace BooBoxServer {
 			// If directory exists continue, if not print an error to the log.
 			if (!Directory.Exists(FolderToAdd)) { Log.AddStatusText("Directory (" + FolderToAdd + ") does not exist. Skipping."); } else {
 				// Add folder to the list if not already in the list.
-				if (!FolderList.Contains(FolderToAdd)) { FolderList.Add(FolderToAdd); }
+				if (!FolderList.Contains(FolderToAdd)) { FolderList.Add(FolderToAdd); Forms.MainFrm.PushSettingsToForm(); }
 				ArrayList TempFileList = new ArrayList();
 				// Begin listing all *.mp3 files in current directory
 				TempFileList = Functions.RecursiveDirctoryListing(FolderToAdd, "*.mp3");
@@ -73,20 +74,27 @@ namespace BooBoxServer {
 				for (int i = 0; i < TempFileList.Count; i++) {
 					fileExistsInLibrary = false;
 					Forms.MainFrm.UpdateStatusProgressBar("Increment", 1);
-					Forms.MainFrm.UpdateStatusLabel("Adding file to Library (" + i + "/" + (TempFileList.Count - 1) + ")... " + Convert.ToInt32((Convert.ToDouble(i) / (TempFileList.Count - 1)) * 100) + "%");
-					// Pull the Tag data from the current file
-					TagLib.File ID3Tag = TagLib.File.Create(TempFileList[i].ToString());
-					if ((ID3Tag.Tag.Title != "") && (ID3Tag.Tag.Title != null) && (ID3Tag.Tag.AlbumArtists.Length > 0) && (ID3Tag.Tag.Album != "")) {
-						// Create the SongInfo object from the ID3Tag
-						tempSongInfo = Functions.ID3ToSongInfo(ID3Tag, Config.Instance.GUID);
-						// Determine if the file has already been added to the Library. If not add it to the Library, if so print an error to the log.
-						for (int x = 0; x < SongList.Count; x++) { if (SongList[x].MD5 == tempSongInfo.MD5) { fileExistsInLibrary = true; break; } }
-						if (fileExistsInLibrary == false) {
-							SongList.Add(tempSongInfo);
-						} else {
-							Log.AddStatusText("File already in Library, skipping: " + tempSongInfo.FileName);
-						}
+					if (TempFileList.Count > 1) {
+						Forms.MainFrm.UpdateStatusLabel("Adding file to Library (" + i + "/" + (TempFileList.Count - 1) + ")... " + Convert.ToInt32((Convert.ToDouble(i) / (TempFileList.Count - 1)) * 100) + "%");
 					}
+					// Pull the Tag data from the current file
+					try {
+						TagLib.File ID3Tag = TagLib.File.Create(TempFileList[i].ToString());
+						if ((ID3Tag.Tag.Title != "") && (ID3Tag.Tag.Title != null) && (ID3Tag.Tag.AlbumArtists.Length > 0) && (ID3Tag.Tag.Album != "")) {
+							// Create the SongInfo object from the ID3Tag
+							tempSongInfo = Functions.ID3ToSongInfo(ID3Tag, Config.Instance.GUID);
+							// Determine if the file has already been added to the Library. If not add it to the Library, if so print an error to the log.
+							for (int x = 0; x < SongList.Count; x++) { if (SongList[x].MD5 == tempSongInfo.MD5) { fileExistsInLibrary = true; break; } }
+							if (fileExistsInLibrary == false) {
+								SongList.Add(tempSongInfo);
+							} else {
+								Log.AddStatusText("File already in Library, skipping: " + tempSongInfo.FileName);
+							}
+						}
+					} catch (TagLib.CorruptFileException) {
+						Log.AddStatusText("Corrupt file found! Skipping: " + TempFileList[i].ToString());
+					}
+
 				}
 				Forms.MainFrm.UpdateStatusProgressBar("Reset", 0);
 				Forms.MainFrm.UpdateStatusLabel("Ready");
@@ -116,7 +124,7 @@ namespace BooBoxServer {
 				}
 			}
 			iLastEditDataTime = DateTime.UtcNow;
-			Thread WorkerThread = new Thread(delegate() { Forms.MainFrm.UpdateMusicLibraryDGV(SongList); }); WorkerThread.Start();
+			Thread WorkerThread = new Thread(delegate() { Forms.MainFrm.PushSettingsToForm(); Forms.MainFrm.UpdateMusicLibraryDGV(SongList); }); WorkerThread.Start();
 		}
 
 		/// <summary>

@@ -23,8 +23,8 @@
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
 			this.MenuStrip = new System.Windows.Forms.MenuStrip();
 			this.FileMenuHeader = new System.Windows.Forms.ToolStripMenuItem();
 			this.SaveSettingsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -365,15 +365,15 @@
 			this.LibraryGrp.Size = new System.Drawing.Size(699, 253);
 			this.LibraryGrp.TabIndex = 2;
 			this.LibraryGrp.TabStop = false;
-			this.LibraryGrp.Text = "Music Library";
+			this.LibraryGrp.Text = "Music Library (0 Selected)";
 			// 
 			// MusicLibraryDGV
 			// 
 			this.MusicLibraryDGV.AllowUserToAddRows = false;
 			this.MusicLibraryDGV.AllowUserToDeleteRows = false;
 			this.MusicLibraryDGV.AllowUserToResizeRows = false;
-			dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(230)))), ((int)(((byte)(230)))));
-			this.MusicLibraryDGV.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+			dataGridViewCellStyle5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(230)))), ((int)(((byte)(230)))));
+			this.MusicLibraryDGV.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle5;
 			this.MusicLibraryDGV.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
 						| System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
@@ -536,15 +536,15 @@
 			this.PlaylistGrp.Size = new System.Drawing.Size(699, 267);
 			this.PlaylistGrp.TabIndex = 3;
 			this.PlaylistGrp.TabStop = false;
-			this.PlaylistGrp.Text = "Playlist";
+			this.PlaylistGrp.Text = "Playlist (0 Selected)";
 			// 
 			// PlaylistDGV
 			// 
 			this.PlaylistDGV.AllowUserToAddRows = false;
 			this.PlaylistDGV.AllowUserToDeleteRows = false;
 			this.PlaylistDGV.AllowUserToResizeRows = false;
-			dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(230)))), ((int)(((byte)(230)))));
-			this.PlaylistDGV.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle2;
+			dataGridViewCellStyle6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(230)))), ((int)(((byte)(230)))));
+			this.PlaylistDGV.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle6;
 			this.PlaylistDGV.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
 						| System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
@@ -765,7 +765,7 @@
 			this.PlaylistComb.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
 			this.PlaylistComb.FormattingEnabled = true;
-			this.PlaylistComb.Location = new System.Drawing.Point(12, 286);
+			this.PlaylistComb.Location = new System.Drawing.Point(12, 289);
 			this.PlaylistComb.Name = "PlaylistComb";
 			this.PlaylistComb.Size = new System.Drawing.Size(420, 21);
 			this.PlaylistComb.Sorted = true;
@@ -778,7 +778,7 @@
 			// 
 			this.AddToPlaylistCmd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.AddToPlaylistCmd.Enabled = false;
-			this.AddToPlaylistCmd.Location = new System.Drawing.Point(438, 284);
+			this.AddToPlaylistCmd.Location = new System.Drawing.Point(438, 287);
 			this.AddToPlaylistCmd.Name = "AddToPlaylistCmd";
 			this.AddToPlaylistCmd.Size = new System.Drawing.Size(85, 23);
 			this.AddToPlaylistCmd.TabIndex = 5;
@@ -790,7 +790,7 @@
 			// 
 			this.DeletePlaylistCmd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.DeletePlaylistCmd.Enabled = false;
-			this.DeletePlaylistCmd.Location = new System.Drawing.Point(529, 284);
+			this.DeletePlaylistCmd.Location = new System.Drawing.Point(529, 287);
 			this.DeletePlaylistCmd.Name = "DeletePlaylistCmd";
 			this.DeletePlaylistCmd.Size = new System.Drawing.Size(85, 23);
 			this.DeletePlaylistCmd.TabIndex = 6;
@@ -801,7 +801,7 @@
 			// NewPlaylistCmd
 			// 
 			this.NewPlaylistCmd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.NewPlaylistCmd.Location = new System.Drawing.Point(620, 284);
+			this.NewPlaylistCmd.Location = new System.Drawing.Point(620, 287);
 			this.NewPlaylistCmd.Name = "NewPlaylistCmd";
 			this.NewPlaylistCmd.Size = new System.Drawing.Size(85, 23);
 			this.NewPlaylistCmd.TabIndex = 7;
@@ -812,9 +812,9 @@
 			// DebugCmd
 			// 
 			this.DebugCmd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.DebugCmd.Location = new System.Drawing.Point(636, -2);
+			this.DebugCmd.Location = new System.Drawing.Point(636, 0);
 			this.DebugCmd.Name = "DebugCmd";
-			this.DebugCmd.Size = new System.Drawing.Size(75, 23);
+			this.DebugCmd.Size = new System.Drawing.Size(75, 24);
 			this.DebugCmd.TabIndex = 8;
 			this.DebugCmd.Text = "Debug";
 			this.DebugCmd.UseVisualStyleBackColor = true;

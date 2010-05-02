@@ -114,6 +114,14 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>if $(ConfigurationName)==Debug "D:\Programming\C#\100501 IncreBuild\bin\Release\IncreBuild.exe" DEBUG "$(SolutionDir)"
+if $(ConfigurationName)==Release "D:\Programming\C#\100501 IncreBuild\bin\Release\IncreBuild.exe" RELEASE "$(SolutionDir)"</PreBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <!-- Force visual studio to use external compiler and avoid cached files -->
+    <UseHostCompilerIfAvailable>False</UseHostCompilerIfAvailable>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
