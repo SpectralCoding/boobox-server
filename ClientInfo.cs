@@ -116,11 +116,11 @@ namespace BooBoxServer {
 							case "LIBRARY":
 								#region LIBRARY
 								DateTime ClientLibraryDate = Convert.ToDateTime(requestData[1]).ToUniversalTime();
-								if (DateTime.Compare(ClientLibraryDate, Library.LastEditDataTime) < 0) {
+								if (DateTime.Compare(ClientLibraryDate, Library.LastEditDateTime) < 0) {
 									String LibraryXML = Library.GetXMLString();
 									String CompressedString = Functions.CompressString(LibraryXML);
 									Log.AddClientText("Sending Library (" + CompressedString.Length + " Bytes)...", Index);
-									Send(Protocol.CreateREQUESTRLIBRARYMETA(CompressedString, Library.SongCount, Library.LastEditDataTime));
+									Send(Protocol.CreateREQUESTRLIBRARYMETA(CompressedString, Library.SongCount, Library.LastEditDateTime));
 									Send(Protocol.CreateREQUESTRLIBRARY(CompressedString));
 									Log.AddClientText("Done Sending Library.", Index);
 								} else {
@@ -131,12 +131,13 @@ namespace BooBoxServer {
 								#endregion
 							case "PLAYLISTLIST":
 								#region PLAYLISTLIST
-								String[] PlaylistList = PlaylistManager.ListPlaylists();
+								DateTime ClientPlaylistListDate = Convert.ToDateTime(requestData[1]).ToUniversalTime();
+								String[] PlaylistList = PlaylistManager.ListPlaylists(ClientPlaylistListDate);
 								for (int i = 0; i < PlaylistList.Length; i++) {
 									Send(Protocol.CreateREQUESTRPLAYLISTLIST(
 										PlaylistList[i].Substring(0, PlaylistList[i].LastIndexOf(" (")),
 										Convert.ToInt32(PlaylistList[i].Substring(PlaylistList[i].LastIndexOf(" (") + 2, PlaylistList[i].Length - PlaylistList[i].LastIndexOf(" (") - 3))
-										));
+									));
 								}
 								break;
 								#endregion

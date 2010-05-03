@@ -13,14 +13,14 @@ namespace BooBoxServer {
 
 		private static ArrayList FolderList = new ArrayList();
 		private static List<SongInfo> SongList = new List<SongInfo>();
-		private static DateTime iLastEditDataTime;
+		private static DateTime iLastEditDateTime;
 
 		public static int SongCount {
 			get { return SongList.Count; }
 		}
 
-		public static DateTime LastEditDataTime {
-			get { return iLastEditDataTime; }
+		public static DateTime LastEditDateTime {
+			get { return iLastEditDateTime; }
 		}
 
 		/// <summary>
@@ -29,7 +29,7 @@ namespace BooBoxServer {
 		public static void SaveSettings() {
 			Config.Instance.LibrarySongList = SongList;
 			Config.Instance.LibraryFolderList = FolderList;
-			Config.Instance.LibraryLastEditDataTime = iLastEditDataTime;
+			Config.Instance.LibraryLastEditDataTime = iLastEditDateTime;
 		}
 
 		/// <summary>
@@ -38,7 +38,7 @@ namespace BooBoxServer {
 		public static void LoadSettings() {
 			SongList = Config.Instance.LibrarySongList;
 			FolderList = Config.Instance.LibraryFolderList;
-			iLastEditDataTime = Config.Instance.LibraryLastEditDataTime;
+			iLastEditDateTime = Config.Instance.LibraryLastEditDataTime;
 			Forms.MainFrm.UpdateMusicLibraryDGV(SongList);
 			//Thread WorkerThread = new Thread(delegate() { Forms.MainFrm.UpdateMusicLibraryDGV(SongList); }); WorkerThread.Start();
 		}
@@ -98,7 +98,7 @@ namespace BooBoxServer {
 				}
 				Forms.MainFrm.UpdateStatusProgressBar("Reset", 0);
 				Forms.MainFrm.UpdateStatusLabel("Ready");
-				iLastEditDataTime = DateTime.UtcNow;
+				iLastEditDateTime = DateTime.UtcNow;
 				SaveSettings();
 				Thread WorkerThread = new Thread(delegate() { Forms.MainFrm.UpdateMusicLibraryDGV(SongList); }); WorkerThread.Start();
 			}
@@ -123,7 +123,7 @@ namespace BooBoxServer {
 					i--;
 				}
 			}
-			iLastEditDataTime = DateTime.UtcNow;
+			iLastEditDateTime = DateTime.UtcNow;
 			Thread WorkerThread = new Thread(delegate() { Forms.MainFrm.PushSettingsToForm(); Forms.MainFrm.UpdateMusicLibraryDGV(SongList); }); WorkerThread.Start();
 		}
 

@@ -890,6 +890,7 @@ namespace BooBoxServer {
 			SaveCurrentPlaylist();
 		}
 		private void DelCmd_Click(object sender, EventArgs e) {
+			DisablePlaylistButtonUpdating = true;
 			ArrayList SelectionAL = new ArrayList();
 			for (int i = 0; i < PlaylistDGV.SelectedRows.Count; i++) { SelectionAL.Add(PlaylistDGV.SelectedRows[i].Index); }
 			SelectionAL.Sort();
@@ -911,6 +912,7 @@ namespace BooBoxServer {
 			} else {
 				DelCmd.Enabled = false;
 			}
+			DisablePlaylistButtonUpdating = false;
 		}
 		private void DownCmd_Click(object sender, EventArgs e) {
 			ArrayList SelectionAL = new ArrayList();
