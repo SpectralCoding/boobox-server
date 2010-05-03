@@ -89,10 +89,13 @@ namespace BooBoxServer {
 					Array.Copy(receiveCharsOld, receiveChars, charLength);
 					String receiveData = new String(receiveChars);
 					SocketPacket.ClientInfo.DataBuffer += receiveData;
-					// If it is the final chunk, call OnReceiveData
-					if (receiveData.Substring(receiveData.Length - 1, 1) == "\x4") {
-						SocketPacket.ClientInfo.DataBuffer = SocketPacket.ClientInfo.DataBuffer.Substring(0, SocketPacket.ClientInfo.DataBuffer.Length - 1);
-						ClientInfoIndexToClientInfo(SocketPacket.ClientIndex).OnReceiveData(SocketPacket.ClientInfo.DataBuffer);
+					// See if multiple messages were sent in the same packet, if so call OnReceiveData for all of them.
+					if (Functions.OccurancesInString(SocketPacket.ClientInfo.DataBuffer, "\x4") >= 1) {
+						String[] splitIncommingData = SocketPacket.ClientInfo.DataBuffer.Split(("\x4").ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+						for (int i = 0; i < splitIncommingData.Length; i++) {
+							SocketPacket.ClientInfo.DataBuffer = SocketPacket.ClientInfo.DataBuffer.Remove(0, splitIncommingData[i].Length + 1);
+							ClientInfoIndexToClientInfo(SocketPacket.ClientIndex).OnReceiveData(splitIncommingData[i]);
+						}
 					}
 					if (SocketPacket.ClientInfo.Socket.Connected == true) {
 						WaitForData(ClientInfoIndexToClientInfo(SocketPacket.ClientIndex));

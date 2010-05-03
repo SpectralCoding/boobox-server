@@ -129,6 +129,17 @@ namespace BooBoxServer {
 								}
 								break;
 								#endregion
+							case "PLAYLISTLIST":
+								#region PLAYLISTLIST
+								String[] PlaylistList = PlaylistManager.ListPlaylists();
+								for (int i = 0; i < PlaylistList.Length; i++) {
+									Send(Protocol.CreateREQUESTRPLAYLISTLIST(
+										PlaylistList[i].Substring(0, PlaylistList[i].LastIndexOf(" (")),
+										Convert.ToInt32(PlaylistList[i].Substring(PlaylistList[i].LastIndexOf(" (") + 2, PlaylistList[i].Length - PlaylistList[i].LastIndexOf(" (") - 3))
+										));
+								}
+								break;
+								#endregion
 							case "SONG":
 								#region SONG
 								/*
