@@ -6,8 +6,7 @@ using System.Windows.Forms;
 
 namespace BooBox {
 	public static class PlaylistManager {
-		public static List<Playlist> PlaylistList = new List<Playlist>();
-		public static List<RemotePlaylistInfo> RemotePlaylistList = new List<RemotePlaylistInfo>();
+		public static List<LocalPlaylist> PlaylistList = new List<LocalPlaylist>();
 
 		/// <summary>
 		/// Creates a Playlist with the specified Name.
@@ -21,10 +20,9 @@ namespace BooBox {
 					return false;
 				}
 			}
-			Playlist tempPlaylist = new Playlist();
+			LocalPlaylist tempPlaylist = new LocalPlaylist();
 			tempPlaylist.Name = Name;
 			tempPlaylist.GUID = Guid.NewGuid().ToString();
-			tempPlaylist.IsLocal = true;
 			PlaylistList.Add(tempPlaylist);
 			return true;
 		}
@@ -36,7 +34,7 @@ namespace BooBox {
 		public static String[] ListPlaylists() {
 			String[] tempReturnStr = new String[PlaylistList.Count];
 			for (int i = 0; i < PlaylistList.Count; i++) {
-				tempReturnStr[tempCount] = PlaylistList[i].Name + " (" + PlaylistList[i].SongList.Count + ")";
+				tempReturnStr[i] = PlaylistList[i].Name + " (" + PlaylistList[i].SongList.Count + ")";
 			}
 			return tempReturnStr;
 		}
@@ -100,10 +98,6 @@ namespace BooBox {
 				//	Console.WriteLine("\t" + PlaylistList[i].SongList[x].Title + " (" + PlaylistList[i].SongList[x].ServerGUID + " | " + PlaylistList[i].SongList[x].MD5 + ")");
 				//}
 			}
-			Console.WriteLine("Remote Playlists:");
-			for (int i = 0; i < RemotePlaylistList.Count; i++) {
-				Console.WriteLine(RemotePlaylistList[i].Name + " (" + RemotePlaylistList[i].ServerGUID + ")");
-			}
 		}
 
 		/// <summary>
@@ -148,18 +142,6 @@ namespace BooBox {
 			}
 			int[] tempReturn = { 0, 0, 0 };
 			return tempReturn;
-		}
-
-		public static void ClearRemotePlaylistList() {
-			RemotePlaylistList.Clear();
-		}
-
-		public static void AddRemotePlaylist(String ServerGUID, String PlaylistName, int SongCount) {
-			RemotePlaylistInfo tempRPI = new RemotePlaylistInfo();
-			tempRPI.ServerGUID = ServerGUID;
-			tempRPI.Name = PlaylistName;
-			tempRPI.SongCount = SongCount;
-			RemotePlaylistList.Add(tempRPI);
 		}
 
 	}
