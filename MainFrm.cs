@@ -13,9 +13,15 @@ using BooBox;
 namespace BooBoxServer {
 	public partial class MainFrm : Form {
 
+		// TODO: Prevent brackets in server names or playlist names.
+		// TODO: Prevent "Local" from being a server name.
+		// TODO: Scroll the DGVs with the Up/Down buttons
+		// TODO: Scrap playcounts being sent to the client, and remove them from the playlist DGV.
+
+
 		#region Form Variables
 		private Boolean DisablePlaylistButtonUpdating = false;
-		private Boolean ConfigLoaded = false;
+		//private Boolean ConfigLoaded = false;
 		private ContextMenu MusicLibraryCM = new ContextMenu();
 		private ContextMenu PlaylistCM = new ContextMenu();
 		#endregion
@@ -26,9 +32,8 @@ namespace BooBoxServer {
 		}
 		private void PopulatePlaylistComb() {
 			PlaylistComb.Items.Clear();
-			String[] tempString = PlaylistManager.ListPlaylists();
-			for (int i = 0; i < tempString.Length; i++) {
-				PlaylistComb.Items.Add(tempString[i]);
+			for (int i = 0; i < PlaylistManager.PlaylistList.Count; i++) {
+				PlaylistComb.Items.Add(PlaylistManager.PlaylistList[i]);
 			}
 		}
 		private void SaveCurrentPlaylist() {
@@ -37,8 +42,8 @@ namespace BooBoxServer {
 				tempSIL.Add((SongInfo)PlaylistDGV.Rows[i].Tag);
 				PlaylistDGV.Rows[i].Cells[0].Value = i;
 			}
-			PlaylistManager.OverwritePlaylistByName(tempSIL, PlaylistComb.SelectedItem.ToString().Substring(0, PlaylistComb.SelectedItem.ToString().LastIndexOf(" (")));
-			PlaylistComb.Text = PlaylistComb.SelectedItem.ToString().Substring(0, PlaylistComb.SelectedItem.ToString().LastIndexOf(" (")) + " (" + PlaylistDGV.Rows.Count + ")";
+			PlaylistManager.OverwritePlaylistByName(tempSIL, ((LocalPlaylist)PlaylistComb.SelectedItem).Name);
+			PlaylistComb.Text = ((LocalPlaylist)PlaylistComb.SelectedItem).ToString();
 		}
 		private void UpdatePlaylistButtons() {
 			if (DisablePlaylistButtonUpdating == false) {
@@ -232,9 +237,9 @@ namespace BooBoxServer {
 				Log.AddStatusText("No configuration file loaded. Assuming new installation. Starting the First Run Wizard.");
 				FirstRunFrm FirstRunFrm = new FirstRunFrm();
 				FirstRunFrm.ShowDialog();
-				ConfigLoaded = true;
+				//ConfigLoaded = true;
 			} else {
-				ConfigLoaded = true;
+				//ConfigLoaded = true;
 			}
 			#endregion
 			Library.LoadSettings();
@@ -554,7 +559,7 @@ namespace BooBoxServer {
 			for (int i = 0; i < MusicLibraryDGV.SelectedRows.Count; i++) {
 				tempSIL.Add((SongInfo)MusicLibraryDGV.SelectedRows[i].Tag);
 			}
-			int successfulCount = PlaylistManager.AddSongInfoListToPlaylist(tempSIL, playlistName);
+			int successfulCount = PlaylistManager.AddSongInfoListToPlaylist(tempSIL, PlaylistManager.GetPlaylistByName(playlistName));
 			UpdatePlaylistDGV(PlaylistManager.GetPlaylistListByName(playlistName));
 			UpdateStatusLabel("Added " + successfulCount + " songs (" + (tempSIL.Count - successfulCount) + " duplicates skipped) to the \"" + playlistName + "\" playlist.");
 		}
@@ -804,7 +809,7 @@ namespace BooBoxServer {
 			DeletePlaylistCmd.Enabled = true;
 			if (MusicLibraryDGV.SelectedRows.Count > 0) { AddToPlaylistCmd.Enabled = true; }
 			if (PlaylistComb.SelectedIndex != -1) {
-				UpdatePlaylistDGV(PlaylistManager.GetPlaylistListByName(PlaylistComb.SelectedItem.ToString().Substring(0, PlaylistComb.SelectedItem.ToString().LastIndexOf(" ("))));
+				UpdatePlaylistDGV(((LocalPlaylist)PlaylistComb.SelectedItem).SongList);
 				UpCmd.Enabled = false; ToTopCmd.Enabled = false; DownCmd.Enabled = true; ToBottomCmd.Enabled = true; DelCmd.Enabled = true;
 				PlaylistDGV.Focus();
 			} else {
@@ -835,7 +840,7 @@ namespace BooBoxServer {
 					if (playlistCreationSuccessful) {
 						PopulatePlaylistComb();
 						for (int i = 0; i < PlaylistComb.Items.Count; i++) {
-							if (PlaylistComb.Items[i].ToString().Substring(0, PlaylistComb.Items[i].ToString().LastIndexOf(" (")) == PlaylistRequestBox.Text) {
+							if (((LocalPlaylist)PlaylistComb.Items[i]).Name == PlaylistRequestBox.Text) {
 								PlaylistComb.SelectedIndex = i;
 								break;
 							}
@@ -845,8 +850,8 @@ namespace BooBoxServer {
 			}
 		}
 		private void DeletePlaylistCmd_Click(object sender, EventArgs e) {
-			UpdateStatusLabel("Deleted the \"" + PlaylistComb.SelectedItem.ToString().Substring(0, PlaylistComb.SelectedItem.ToString().LastIndexOf(" (")) + "\" playlist.");
-			PlaylistManager.DeletePlaylistByName(PlaylistComb.SelectedItem.ToString().Substring(0, PlaylistComb.SelectedItem.ToString().LastIndexOf(" (")));
+			UpdateStatusLabel("Deleted the \"" + ((LocalPlaylist)PlaylistComb.SelectedItem).Name + "\" playlist.");
+			PlaylistManager.DeletePlaylist(((LocalPlaylist)PlaylistComb.SelectedItem));
 			PlaylistComb.SelectedIndex = -1;
 			PopulatePlaylistComb();
 		}
@@ -855,8 +860,9 @@ namespace BooBoxServer {
 			for (int i = 0; i < MusicLibraryDGV.SelectedRows.Count; i++) {
 				tempSIL.Add((SongInfo)MusicLibraryDGV.SelectedRows[i].Tag);
 			}
-			int successfulCount = PlaylistManager.AddSongInfoListToPlaylist(tempSIL, PlaylistComb.SelectedItem.ToString().Substring(0, PlaylistComb.SelectedItem.ToString().LastIndexOf(" (")));
-			UpdatePlaylistDGV(PlaylistManager.GetPlaylistListByName(PlaylistComb.SelectedItem.ToString().Substring(0, PlaylistComb.SelectedItem.ToString().LastIndexOf(" ("))));
+			LocalPlaylist tempLP = (LocalPlaylist)PlaylistComb.SelectedItem;
+			int successfulCount = PlaylistManager.AddSongInfoListToPlaylist(tempSIL, tempLP);
+			UpdatePlaylistDGV(PlaylistManager.GetPlaylistListByName(tempLP.Name));
 			UpdateStatusLabel("Added " + successfulCount + " songs (" + (tempSIL.Count - successfulCount) + " duplicates skipped) to the \"" + PlaylistComb.SelectedItem.ToString().Substring(0, PlaylistComb.SelectedItem.ToString().LastIndexOf(" (")) + "\" playlist.");
 		}
 		private void ToTopCmd_Click(object sender, EventArgs e) {
@@ -897,7 +903,7 @@ namespace BooBoxServer {
 			int topIndex = (int)SelectionAL[0];
 			for (int i = SelectionAL.Count - 1; i > -1; i--) { PlaylistDGV.Rows.RemoveAt((int)SelectionAL[i]); }
 			SaveCurrentPlaylist();
-			int[] tempAttributeCount = PlaylistManager.GetAttributeCountByName(PlaylistComb.SelectedItem.ToString().Substring(0, PlaylistComb.SelectedItem.ToString().LastIndexOf(" (")));
+			int[] tempAttributeCount = PlaylistManager.GetAttributeCountByName(((LocalPlaylist)PlaylistComb.SelectedItem).Name);
 			PlaylistDGV.Columns[1].HeaderText = "Title (" + tempAttributeCount[0] + ")";
 			PlaylistDGV.Columns[2].HeaderText = "Artists (" + tempAttributeCount[1] + ")";
 			PlaylistDGV.Columns[3].HeaderText = "Album (" + tempAttributeCount[2] + ")";
@@ -947,7 +953,8 @@ namespace BooBoxServer {
 		#endregion
 
 		private void DebugCmd_Click(object sender, EventArgs e) {
-			PlaylistManager.PrintPlaylistTree();
+			//PlaylistManager.PrintPlaylistTree();
+
 		}
 
 	}

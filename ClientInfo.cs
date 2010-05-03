@@ -131,14 +131,17 @@ namespace BooBoxServer {
 								#endregion
 							case "PLAYLISTLIST":
 								#region PLAYLISTLIST
-								DateTime ClientPlaylistListDate = Convert.ToDateTime(requestData[1]).ToUniversalTime();
-								String[] PlaylistList = PlaylistManager.ListPlaylists(ClientPlaylistListDate);
-								for (int i = 0; i < PlaylistList.Length; i++) {
-									Send(Protocol.CreateREQUESTRPLAYLISTLIST(
-										PlaylistList[i].Substring(0, PlaylistList[i].LastIndexOf(" (")),
-										Convert.ToInt32(PlaylistList[i].Substring(PlaylistList[i].LastIndexOf(" (") + 2, PlaylistList[i].Length - PlaylistList[i].LastIndexOf(" (") - 3))
-									));
+								Log.AddClientText("Sending Playlist List", Index);
+								for (int i = 0; i < PlaylistManager.PlaylistList.Count; i++) {
+									Send(Protocol.CreateREQUESTRPLAYLISTLIST(PlaylistManager.PlaylistList[i].Name, PlaylistManager.PlaylistList[i].SongList.Count, PlaylistManager.PlaylistList[i].GUID));
 								}
+								Log.AddClientText("Done Sending Playlist List", Index);
+								Send(Protocol.CreateREQUESTRPLAYLISTLISTFINISHED());
+								break;
+								#endregion
+							case "PLAYLIST":
+								#region PLAYLIST
+								// TODO: Reply with REQUESTR PLAYLIST <xml data>
 								break;
 								#endregion
 							case "SONG":

@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using BooBox;
 
-namespace BooBox {
+namespace BooBoxServer {
 	public static class PlaylistManager {
 		public static List<LocalPlaylist> PlaylistList = new List<LocalPlaylist>();
 
@@ -28,6 +29,29 @@ namespace BooBox {
 		}
 
 		/// <summary>
+		/// Deletes a playlist by name.
+		/// </summary>
+		/// <param name="PlaylistObj">Name of playlist to delete</param>
+		public static void DeletePlaylist(LocalPlaylist PlaylistObj) {
+			PlaylistList.Remove(PlaylistObj);
+		}
+
+		/// <summary>
+		/// Adds a list of SongInfo objects to a playlist by playlist name.
+		/// </summary>
+		/// <param name="SongInfoList">List of SongInfo objects</param>
+		/// <param name="PlaylistObj">Name of playlist to add songs to</param>
+		/// <returns>Integer revealing number of songs successfully added to the playlist.</returns>
+		public static int AddSongInfoListToPlaylist(List<SongInfo> SongInfoList, LocalPlaylist PlaylistObj) {
+			int successfulCount = 0;
+			int indexToEdit = PlaylistList.IndexOf(PlaylistObj);
+			for (int i = 0; i < SongInfoList.Count; i++) {
+				if (PlaylistList[indexToEdit].AddSongToList(SongInfoList[i])) { successfulCount++; }
+			}
+			return successfulCount;
+		}
+
+		/// <summary>
 		/// Lists all playlists by name and song count in a String Array.
 		/// </summary>
 		/// <returns>String[] containing list of Playlists and their song counts</returns>
@@ -37,67 +61,6 @@ namespace BooBox {
 				tempReturnStr[i] = PlaylistList[i].Name + " (" + PlaylistList[i].SongList.Count + ")";
 			}
 			return tempReturnStr;
-		}
-
-		public static String[] ListPlaylists(DateTime EditedSinceDate) {
-			String[] tempReturnStr = new String[PlaylistList.Count];
-			int tempCount = 0;
-			for (int i = 0; i < PlaylistList.Count; i++) {
-				if (DateTime.Compare(EditedSinceDate, PlaylistList[i].LastEditDateTime) < 0) {
-					tempReturnStr[i] = PlaylistList[i].Name + " (" + PlaylistList[i].SongList.Count + ")";
-					tempCount++;
-				}
-			}
-			String[] returnStr = new String[tempCount];
-			for (int i = 0; i < returnStr.Length; i++) {
-				returnStr[i] = tempReturnStr[i];
-			}
-			return returnStr;
-		}
-
-		/// <summary>
-		/// Deletes a playlist by name.
-		/// </summary>
-		/// <param name="PlaylistName">Name of playlist to delete</param>
-		public static void DeletePlaylistByName(String PlaylistName) {
-			for (int i = 0; i < PlaylistList.Count; i++) {
-				if (PlaylistList[i].Name == PlaylistName) {
-					PlaylistList.RemoveAt(i);
-					return;
-				}
-			}
-		}
-
-		/// <summary>
-		/// Adds a list of SongInfo objects to a playlist by playlist name.
-		/// </summary>
-		/// <param name="SongInfoList">List of SongInfo objects</param>
-		/// <param name="PlaylistName">Name of playlist to add songs to</param>
-		/// <returns>Integer revealing number of songs successfully added to the playlist.</returns>
-		public static int AddSongInfoListToPlaylist(List<SongInfo> SongInfoList, String PlaylistName) {
-			int successfulCount = 0;
-			for (int i = 0; i < PlaylistList.Count; i++) {
-				if (PlaylistList[i].Name == PlaylistName) {
-					for (int x = 0; x < SongInfoList.Count; x++) {
-						if (PlaylistList[i].AddSongToList(SongInfoList[x])) { successfulCount++; }
-					}
-					return successfulCount;
-				}
-			}
-			return successfulCount;
-		}
-		
-		/// <summary>
-		/// Prints the playlist tree to the Console.
-		/// </summary>
-		public static void PrintPlaylistTree() {
-			Console.WriteLine("Local Playlists:");
-			for (int i = 0; i < PlaylistList.Count; i++) {
-				Console.WriteLine(PlaylistList[i].Name + " (" + PlaylistList[i].GUID + ")");
-				//for (int x = 0; x < PlaylistList[i].SongList.Count; x++) {
-				//	Console.WriteLine("\t" + PlaylistList[i].SongList[x].Title + " (" + PlaylistList[i].SongList[x].ServerGUID + " | " + PlaylistList[i].SongList[x].MD5 + ")");
-				//}
-			}
 		}
 
 		/// <summary>
@@ -114,6 +77,15 @@ namespace BooBox {
 			return new List<SongInfo>();
 		}
 
+		public static LocalPlaylist GetPlaylistByName(String PlaylistName) {
+			for (int i = 0; i < PlaylistList.Count; i++) {
+				if (PlaylistList[i].Name == PlaylistName) {
+					return PlaylistList[i];
+				}
+			}
+			return new LocalPlaylist();
+		}
+
 		/// <summary>
 		/// Overwrited the playlist related to PlaylistName with SongInfoList's contents.
 		/// </summary>
@@ -123,7 +95,6 @@ namespace BooBox {
 			for (int i = 0; i < PlaylistList.Count; i++) {
 				if (PlaylistList[i].Name == PlaylistName) {
 					PlaylistList[i].SongList = SongInfoList;
-					PlaylistList[i].LastEditDateTime = DateTime.UtcNow;
 					return;
 				}
 			}
