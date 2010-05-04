@@ -15,8 +15,7 @@ namespace BooBoxServer {
 
 		// TODO: Prevent brackets in server names or playlist names.
 		// TODO: Prevent "Local" from being a server name.
-		// TODO: Scroll the DGVs with the Up/Down buttons
-		// TODO: Scrap playcounts being sent to the client, and remove them from the playlist DGV.
+		// TODO: Scrap playcounts being sent to the client.
 
 
 		#region Form Variables
@@ -70,6 +69,27 @@ namespace BooBoxServer {
 					DownCmd.Enabled = false;
 					ToBottomCmd.Enabled = false;
 					DelCmd.Enabled = false;
+				}
+			}
+		}
+		private void ScrollPlaylistDGV(int IndexToAlwaysShow) {
+			Console.WriteLine(IndexToAlwaysShow);
+			int displayTopIndex = PlaylistDGV.FirstDisplayedScrollingRowIndex;
+			int displayBottomIndex = PlaylistDGV.FirstDisplayedScrollingRowIndex + PlaylistDGV.DisplayedRowCount(false) - 1;
+			int newFirstRowIndex = 0;
+			if (displayBottomIndex < IndexToAlwaysShow) {
+				newFirstRowIndex = IndexToAlwaysShow - PlaylistDGV.DisplayedRowCount(false) + 1;
+				if (newFirstRowIndex < PlaylistDGV.Rows.Count) {
+					PlaylistDGV.FirstDisplayedScrollingRowIndex = newFirstRowIndex;
+				} else {
+					PlaylistDGV.FirstDisplayedScrollingRowIndex = PlaylistDGV.Rows.Count - 1;
+				}
+			} else if (displayTopIndex > IndexToAlwaysShow - 1) {
+				newFirstRowIndex = IndexToAlwaysShow - 1;
+				if (newFirstRowIndex >= 0) {
+					PlaylistDGV.FirstDisplayedScrollingRowIndex = newFirstRowIndex;
+				} else {
+					PlaylistDGV.FirstDisplayedScrollingRowIndex = 0;
 				}
 			}
 		}
@@ -869,7 +889,6 @@ namespace BooBoxServer {
 			ArrayList SelectionAL = new ArrayList();
 			for (int i = 0; i < PlaylistDGV.SelectedRows.Count; i++) { SelectionAL.Add(PlaylistDGV.SelectedRows[i].Index); }
 			SelectionAL.Sort();
-			int topIndex = (int)SelectionAL[0];
 			DataGridViewRow tempDGVR;
 			for (int i = SelectionAL.Count - 1; i > -1; i--) {
 				tempDGVR = PlaylistDGV.Rows[(int)SelectionAL[i]];
@@ -879,12 +898,12 @@ namespace BooBoxServer {
 			PlaylistDGV.ClearSelection();
 			for (int i = 0; i < SelectionAL.Count; i++) { PlaylistDGV.Rows[i].Selected = true; }
 			SaveCurrentPlaylist();
+			ScrollPlaylistDGV(0);
 		}
 		private void UpCmd_Click(object sender, EventArgs e) {
 			ArrayList SelectionAL = new ArrayList();
 			for (int i = 0; i < PlaylistDGV.SelectedRows.Count; i++) { SelectionAL.Add(PlaylistDGV.SelectedRows[i].Index); }
 			SelectionAL.Sort();
-			int topIndex = (int)SelectionAL[0];
 			DataGridViewRow tempDGVR;
 			for (int i = 0; i < SelectionAL.Count; i++) {
 				tempDGVR = PlaylistDGV.Rows[(int)SelectionAL[i]];
@@ -894,6 +913,7 @@ namespace BooBoxServer {
 			PlaylistDGV.ClearSelection();
 			for (int i = 0; i < SelectionAL.Count; i++) { PlaylistDGV.Rows[(int)SelectionAL[i] - 1].Selected = true; }
 			SaveCurrentPlaylist();
+			ScrollPlaylistDGV((int)SelectionAL[0]);
 		}
 		private void DelCmd_Click(object sender, EventArgs e) {
 			DisablePlaylistButtonUpdating = true;
@@ -924,7 +944,6 @@ namespace BooBoxServer {
 			ArrayList SelectionAL = new ArrayList();
 			for (int i = 0; i < PlaylistDGV.SelectedRows.Count; i++) { SelectionAL.Add(PlaylistDGV.SelectedRows[i].Index); }
 			SelectionAL.Sort();
-			int topIndex = (int)SelectionAL[0];
 			DataGridViewRow tempDGVR;
 			for (int i = SelectionAL.Count - 1; i > -1; i--) {
 				tempDGVR = PlaylistDGV.Rows[(int)SelectionAL[i]];
@@ -934,6 +953,7 @@ namespace BooBoxServer {
 			PlaylistDGV.ClearSelection();
 			for (int i = 0; i < SelectionAL.Count; i++) { PlaylistDGV.Rows[(int)SelectionAL[i] + 1].Selected = true; }
 			SaveCurrentPlaylist();
+			ScrollPlaylistDGV((int)SelectionAL[SelectionAL.Count - 1] + 1);
 		}
 		private void ToBottomCmd_Click(object sender, EventArgs e) {
 			ArrayList SelectionAL = new ArrayList();
@@ -949,6 +969,7 @@ namespace BooBoxServer {
 			PlaylistDGV.ClearSelection();
 			for (int i = 0; i < SelectionAL.Count; i++) { PlaylistDGV.Rows[PlaylistDGV.Rows.Count - 1 - i].Selected = true; }
 			SaveCurrentPlaylist();
+			ScrollPlaylistDGV(PlaylistDGV.Rows.Count - 1);
 		}
 		#endregion
 
