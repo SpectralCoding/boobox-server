@@ -73,7 +73,6 @@ namespace BooBoxServer {
 			}
 		}
 		private void ScrollPlaylistDGV(int IndexToAlwaysShow) {
-			Console.WriteLine(IndexToAlwaysShow);
 			int displayTopIndex = PlaylistDGV.FirstDisplayedScrollingRowIndex;
 			int displayBottomIndex = PlaylistDGV.FirstDisplayedScrollingRowIndex + PlaylistDGV.DisplayedRowCount(false) - 1;
 			int newFirstRowIndex = 0;

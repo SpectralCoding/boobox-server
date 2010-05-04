@@ -54,7 +54,6 @@ namespace BooBoxServer {
 		/// </summary>
 		/// <param name="Data">Contains data sent from the Client</param>
 		public void OnReceiveData(String Data) {
-			DataBuffer = "";
 			if (Data.Length > 1000) {
 				Console.WriteLine("From ClientInfo " + Index + ":\t" + Data.Substring(0, 1000) + "...");
 			} else {
