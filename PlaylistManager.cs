@@ -29,6 +29,48 @@ namespace BooBoxServer {
 		}
 
 		/// <summary>
+		/// Gets a Playlist's SongInfo list from the playlist name.
+		/// </summary>
+		/// <param name="PlaylistName">Name of playlist sought</param>
+		/// <returns>List of SongInfo objects inside the playlist</returns>
+		public static List<SongInfo> GetPlaylistListByName(String PlaylistName) {
+			for (int i = 0; i < LocalPlaylistList.Count; i++) {
+				if (LocalPlaylistList[i].Name == PlaylistName) {
+					return LocalPlaylistList[i].SongList;
+				}
+			}
+			return new List<SongInfo>();
+		}
+
+		/// <summary>
+		/// Returns a LocalPlaylist object given its name.
+		/// </summary>
+		/// <param name="PlaylistName">Name of LocalPlaylist to return.</param>
+		/// <returns>LocalPlaylist object</returns>
+		public static LocalPlaylist GetPlaylistByName(String PlaylistName) {
+			for (int i = 0; i < LocalPlaylistList.Count; i++) {
+				if (LocalPlaylistList[i].Name == PlaylistName) {
+					return LocalPlaylistList[i];
+				}
+			}
+			return new LocalPlaylist();
+		}
+
+		/// <summary>
+		/// Returns a LocalPlaylist object related to a Playlist GUID.
+		/// </summary>
+		/// <param name="PlaylistGUID">GUID of the playlist being sought</param>
+		/// <returns>LocalPlaylist object</returns>
+		public static LocalPlaylist GetLocalPlaylistFromGUID(String PlaylistGUID) {
+			for (int i = 0; i < LocalPlaylistList.Count; i++) {
+				if (LocalPlaylistList[i].GUID == PlaylistGUID) {
+					return LocalPlaylistList[i];
+				}
+			}
+			return (new LocalPlaylist());
+		}
+
+		/// <summary>
 		/// Deletes a playlist by name.
 		/// </summary>
 		/// <param name="PlaylistGUID">GUID of playlist to delete</param>
@@ -63,41 +105,6 @@ namespace BooBoxServer {
 		}
 
 		/// <summary>
-		/// Lists all playlists by name and song count in a String Array.
-		/// </summary>
-		/// <returns>String[] containing list of Playlists and their song counts</returns>
-		public static String[] ListPlaylists() {
-			String[] tempReturnStr = new String[LocalPlaylistList.Count];
-			for (int i = 0; i < LocalPlaylistList.Count; i++) {
-				tempReturnStr[i] = LocalPlaylistList[i].Name + " (" + LocalPlaylistList[i].SongList.Count + ")";
-			}
-			return tempReturnStr;
-		}
-
-		/// <summary>
-		/// Gets a Playlist's SongInfo list from the playlist name.
-		/// </summary>
-		/// <param name="PlaylistName">Name of playlist sought</param>
-		/// <returns>List of SongInfo objects inside the playlist</returns>
-		public static List<SongInfo> GetPlaylistListByName(String PlaylistName) {
-			for (int i = 0; i < LocalPlaylistList.Count; i++) {
-				if (LocalPlaylistList[i].Name == PlaylistName) {
-					return LocalPlaylistList[i].SongList;
-				}
-			}
-			return new List<SongInfo>();
-		}
-
-		public static LocalPlaylist GetPlaylistByName(String PlaylistName) {
-			for (int i = 0; i < LocalPlaylistList.Count; i++) {
-				if (LocalPlaylistList[i].Name == PlaylistName) {
-					return LocalPlaylistList[i];
-				}
-			}
-			return new LocalPlaylist();
-		}
-
-		/// <summary>
 		/// Overwrited the playlist related to PlaylistName with SongInfoList's contents.
 		/// </summary>
 		/// <param name="SongInfoList">List of SongInfo objects to populate the playlist with</param>
@@ -124,15 +131,6 @@ namespace BooBoxServer {
 			}
 			int[] tempReturn = { 0, 0, 0 };
 			return tempReturn;
-		}
-
-		public static LocalPlaylist GetLocalPlaylistFromGUID(String PlaylistGUID) {
-			for (int i = 0; i < LocalPlaylistList.Count; i++) {
-				if (LocalPlaylistList[i].GUID == PlaylistGUID) {
-					return LocalPlaylistList[i];
-				}
-			}
-			return (new LocalPlaylist());
 		}
 
 	}
