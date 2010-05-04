@@ -32,8 +32,8 @@ namespace BooBoxServer {
 		}
 		private void PopulatePlaylistComb() {
 			PlaylistComb.Items.Clear();
-			for (int i = 0; i < PlaylistManager.PlaylistList.Count; i++) {
-				PlaylistComb.Items.Add(PlaylistManager.PlaylistList[i]);
+			for (int i = 0; i < PlaylistManager.LocalPlaylistList.Count; i++) {
+				PlaylistComb.Items.Add(PlaylistManager.LocalPlaylistList[i]);
 			}
 		}
 		private void SaveCurrentPlaylist() {
@@ -243,7 +243,7 @@ namespace BooBoxServer {
 			}
 			#endregion
 			Library.LoadSettings();
-			PlaylistManager.PlaylistList = Config.Instance.PlaylistList;
+			PlaylistManager.LocalPlaylistList = Config.Instance.LocalPlaylistList;
 			PushSettingsToForm();
 			PopulatePlaylistComb();
 			MusicLibraryDGV.ClearSelection();
@@ -277,7 +277,7 @@ namespace BooBoxServer {
 			Config.Instance.MainFrmWindowSizeWidth = this.Width;
 			Config.Instance.MainFrmWindowSizeHeight = this.Height;
 			Library.SaveSettings();
-			Config.Instance.PlaylistList = PlaylistManager.PlaylistList;
+			Config.Instance.LocalPlaylistList = PlaylistManager.LocalPlaylistList;
 			Config.Instance.Save();
 			Log.AddStatusText("BooBox Server close by user.");
 			Log.CloseLog();
@@ -491,10 +491,10 @@ namespace BooBoxServer {
 		private void MusicLibraryDGV_MouseUp(object sender, MouseEventArgs e) {
 			if (e.Button == MouseButtons.Right) {
 				MusicLibraryCM.MenuItems.Clear();
-				MenuItem[] tempAddBySongCMMI = new MenuItem[PlaylistManager.PlaylistList.Count];
-				for (int i = 0; i < PlaylistManager.PlaylistList.Count; i++) {
+				MenuItem[] tempAddBySongCMMI = new MenuItem[PlaylistManager.LocalPlaylistList.Count];
+				for (int i = 0; i < PlaylistManager.LocalPlaylistList.Count; i++) {
 					tempAddBySongCMMI[i] = new MenuItem();
-					tempAddBySongCMMI[i].Text = PlaylistManager.PlaylistList[i].Name;
+					tempAddBySongCMMI[i].Text = PlaylistManager.LocalPlaylistList[i].Name;
 					tempAddBySongCMMI[i].Click += new EventHandler(AddBySongMLCMMI_Click);
 				}
 				if (MusicLibraryDGV.SelectedRows.Count == 1) {
@@ -559,7 +559,7 @@ namespace BooBoxServer {
 			for (int i = 0; i < MusicLibraryDGV.SelectedRows.Count; i++) {
 				tempSIL.Add((SongInfo)MusicLibraryDGV.SelectedRows[i].Tag);
 			}
-			int successfulCount = PlaylistManager.AddSongInfoListToPlaylist(tempSIL, PlaylistManager.GetPlaylistByName(playlistName));
+			int successfulCount = PlaylistManager.AddSongInfoListToPlaylist(tempSIL, PlaylistManager.GetPlaylistByName(playlistName).GUID);
 			UpdatePlaylistDGV(PlaylistManager.GetPlaylistListByName(playlistName));
 			UpdateStatusLabel("Added " + successfulCount + " songs (" + (tempSIL.Count - successfulCount) + " duplicates skipped) to the \"" + playlistName + "\" playlist.");
 		}
@@ -851,7 +851,7 @@ namespace BooBoxServer {
 		}
 		private void DeletePlaylistCmd_Click(object sender, EventArgs e) {
 			UpdateStatusLabel("Deleted the \"" + ((LocalPlaylist)PlaylistComb.SelectedItem).Name + "\" playlist.");
-			PlaylistManager.DeletePlaylist(((LocalPlaylist)PlaylistComb.SelectedItem));
+			PlaylistManager.DeletePlaylist(((LocalPlaylist)PlaylistComb.SelectedItem).GUID);
 			PlaylistComb.SelectedIndex = -1;
 			PopulatePlaylistComb();
 		}
@@ -861,9 +861,9 @@ namespace BooBoxServer {
 				tempSIL.Add((SongInfo)MusicLibraryDGV.SelectedRows[i].Tag);
 			}
 			LocalPlaylist tempLP = (LocalPlaylist)PlaylistComb.SelectedItem;
-			int successfulCount = PlaylistManager.AddSongInfoListToPlaylist(tempSIL, tempLP);
+			int successfulCount = PlaylistManager.AddSongInfoListToPlaylist(tempSIL, tempLP.GUID);
 			UpdatePlaylistDGV(PlaylistManager.GetPlaylistListByName(tempLP.Name));
-			UpdateStatusLabel("Added " + successfulCount + " songs (" + (tempSIL.Count - successfulCount) + " duplicates skipped) to the \"" + PlaylistComb.SelectedItem.ToString().Substring(0, PlaylistComb.SelectedItem.ToString().LastIndexOf(" (")) + "\" playlist.");
+			UpdateStatusLabel("Added " + successfulCount + " songs (" + (tempSIL.Count - successfulCount) + " duplicates skipped) to the \"" + tempLP.Name + "\" playlist.");
 		}
 		private void ToTopCmd_Click(object sender, EventArgs e) {
 			ArrayList SelectionAL = new ArrayList();

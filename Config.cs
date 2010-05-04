@@ -22,7 +22,7 @@ namespace BooBoxServer {
 		public int DataBufferSize = 4096;
 		public String GUID = "";
 		public Boolean Configured = false;
-		public List<LocalPlaylist> PlaylistList = new List<LocalPlaylist>();
+		public List<LocalPlaylist> LocalPlaylistList = new List<LocalPlaylist>();
 		public ArrayList LibraryFolderList = new ArrayList();
 		public DateTime LibraryLastEditDataTime = DateTime.UtcNow;
 		public List<SongInfo> LibrarySongList = new List<SongInfo>();

@@ -132,8 +132,8 @@ namespace BooBoxServer {
 							case "PLAYLISTLIST":
 								#region PLAYLISTLIST
 								Log.AddClientText("Sending Playlist List", Index);
-								for (int i = 0; i < PlaylistManager.PlaylistList.Count; i++) {
-									Send(Protocol.CreateREQUESTRPLAYLISTLIST(PlaylistManager.PlaylistList[i].Name, PlaylistManager.PlaylistList[i].SongList.Count, PlaylistManager.PlaylistList[i].GUID));
+								for (int i = 0; i < PlaylistManager.LocalPlaylistList.Count; i++) {
+									Send(Protocol.CreateREQUESTRPLAYLISTLIST(PlaylistManager.LocalPlaylistList[i].Name, PlaylistManager.LocalPlaylistList[i].SongList.Count, PlaylistManager.LocalPlaylistList[i].GUID));
 								}
 								Log.AddClientText("Done Sending Playlist List", Index);
 								Send(Protocol.CreateREQUESTRPLAYLISTLISTFINISHED());
@@ -141,7 +141,11 @@ namespace BooBoxServer {
 								#endregion
 							case "PLAYLIST":
 								#region PLAYLIST
-								// TODO: Reply with REQUESTR PLAYLIST <xml data>
+								LocalPlaylist tempLP = PlaylistManager.GetLocalPlaylistFromGUID(requestData[1]);
+								String LPXMLString = tempLP.GetXMLString();
+								Log.AddClientText("Sending Playlist \"" + "\" (" + LPXMLString.Length + " Bytes)...", Index);
+								Send(Protocol.CreateREQUESTRPLAYLIST(LPXMLString));
+								Log.AddClientText("Done Sending Library.", Index);
 								break;
 								#endregion
 							case "SONG":
