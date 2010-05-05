@@ -262,6 +262,7 @@ namespace BooBoxServer {
 			PopulatePlaylistComb();
 			MusicLibraryDGV.ClearSelection();
 			CommInfo.StartListening();
+			CommStream.StartListening();
 		}
 		private void MainFrm_Resize(object sender, EventArgs e) {
 			#region Vertical Calculations

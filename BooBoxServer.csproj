@@ -59,7 +59,9 @@
     <Compile Include="AboutFrm.Designer.cs">
       <DependentUpon>AboutFrm.cs</DependentUpon>
     </Compile>
+    <Compile Include="ClientStream.cs" />
     <Compile Include="CommInfo.cs" />
+    <Compile Include="CommStream.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="FirstRunFrm.cs">
       <SubType>Form</SubType>
@@ -78,6 +80,7 @@
     <Compile Include="PlaylistManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StreamManager.cs" />
     <EmbeddedResource Include="AboutFrm.resx">
       <DependentUpon>AboutFrm.cs</DependentUpon>
     </EmbeddedResource>

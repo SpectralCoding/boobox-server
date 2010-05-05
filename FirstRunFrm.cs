@@ -50,7 +50,7 @@ namespace BooBoxServer {
 					CurrentPage--;
 					UpdateWizard();
 					MessageBox.Show("Server name may not be blank. Type a valid server name to continue.");
-				} else if (tempServerName != "Local") {
+				} else if (tempServerName == "Local") {
 					CurrentPage--;
 					UpdateWizard();
 					MessageBox.Show("Server name may not be \"Local\".");

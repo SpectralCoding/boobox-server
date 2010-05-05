@@ -166,6 +166,15 @@ namespace BooBoxServer {
 			return tempResult.ToString();
 		}
 
+		public static SongInfo GetSongInfoFromMD5(String MD5) {
+			for (int i = 0; i < SongList.Count; i++) {
+				if (SongList[i].MD5 == MD5) {
+					return SongList[i];
+				}
+			}
+			return new SongInfo();
+		}
+
 
 	}
 }

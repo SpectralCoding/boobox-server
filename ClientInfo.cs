@@ -149,14 +149,9 @@ namespace BooBoxServer {
 								#endregion
 							case "SONG":
 								#region SONG
-								/*
-								requestData[1] = requestData[1].Replace("\\\\", "");
-								FileStream MusicFileFS = new FileStream(requestData[1], FileMode.Open, FileAccess.Read);
-								Functions.Log = "[CI" + ClientInfo.Index + "] Requested Song: " + requestData[1];
-								Functions.Log = "[CI" + ClientInfo.Index + "]   Sending Song Info...";
-								ClientInfo.Send(CreateREQUESTRSONGINFO(requestData[1]));
-								ClientInfo.Send(CreateREQUESTRSONGKEY(StreamManager.AddSongRequest(ClientInfo, MusicFileFS.Name)));
-								*/
+								SongInfo tempSI = Library.GetSongInfoFromMD5(requestData[1]);
+								String tempSongKey = StreamManager.AddSongRequest(tempSI);
+								Send(Protocol.CreateREQUESTRSONGKEY(tempSI.MD5, tempSongKey));
 								break;
 								#endregion
 						}
