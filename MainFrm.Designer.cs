@@ -23,8 +23,8 @@
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
 			this.MenuStrip = new System.Windows.Forms.MenuStrip();
 			this.FileMenuHeader = new System.Windows.Forms.ToolStripMenuItem();
 			this.SaveSettingsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -372,8 +372,8 @@
 			this.MusicLibraryDGV.AllowUserToAddRows = false;
 			this.MusicLibraryDGV.AllowUserToDeleteRows = false;
 			this.MusicLibraryDGV.AllowUserToResizeRows = false;
-			dataGridViewCellStyle5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(230)))), ((int)(((byte)(230)))));
-			this.MusicLibraryDGV.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle5;
+			dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(230)))), ((int)(((byte)(230)))));
+			this.MusicLibraryDGV.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
 			this.MusicLibraryDGV.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
 						| System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
@@ -404,7 +404,7 @@
 			this.MusicLibraryDGV.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
 			this.MusicLibraryDGV.ShowEditingIcon = false;
 			this.MusicLibraryDGV.Size = new System.Drawing.Size(687, 227);
-			this.MusicLibraryDGV.TabIndex = 25;
+			this.MusicLibraryDGV.TabIndex = 0;
 			this.MusicLibraryDGV.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.MusicLibraryDGV_ColumnHeaderMouseClick);
 			this.MusicLibraryDGV.SelectionChanged += new System.EventHandler(this.MusicLibraryDGV_SelectionChanged);
 			this.MusicLibraryDGV.MouseUp += new System.Windows.Forms.MouseEventHandler(this.MusicLibraryDGV_MouseUp);
@@ -543,8 +543,8 @@
 			this.PlaylistDGV.AllowUserToAddRows = false;
 			this.PlaylistDGV.AllowUserToDeleteRows = false;
 			this.PlaylistDGV.AllowUserToResizeRows = false;
-			dataGridViewCellStyle6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(230)))), ((int)(((byte)(230)))));
-			this.PlaylistDGV.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle6;
+			dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(230)))), ((int)(((byte)(230)))));
+			this.PlaylistDGV.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle2;
 			this.PlaylistDGV.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
 						| System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
@@ -576,7 +576,7 @@
 			this.PlaylistDGV.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
 			this.PlaylistDGV.ShowEditingIcon = false;
 			this.PlaylistDGV.Size = new System.Drawing.Size(648, 241);
-			this.PlaylistDGV.TabIndex = 26;
+			this.PlaylistDGV.TabIndex = 5;
 			this.PlaylistDGV.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.PlaylistDGV_ColumnHeaderMouseClick);
 			this.PlaylistDGV.SelectionChanged += new System.EventHandler(this.PlaylistDGV_SelectionChanged);
 			this.PlaylistDGV.MouseUp += new System.Windows.Forms.MouseEventHandler(this.PlaylistDGV_MouseUp);
@@ -708,7 +708,7 @@
 			this.DelCmd.Location = new System.Drawing.Point(660, 123);
 			this.DelCmd.Name = "DelCmd";
 			this.DelCmd.Size = new System.Drawing.Size(33, 33);
-			this.DelCmd.TabIndex = 12;
+			this.DelCmd.TabIndex = 8;
 			this.DelCmd.Text = "Del";
 			this.DelCmd.UseVisualStyleBackColor = true;
 			this.DelCmd.Click += new System.EventHandler(this.DelCmd_Click);
@@ -720,7 +720,7 @@
 			this.ToBottomCmd.Location = new System.Drawing.Point(660, 214);
 			this.ToBottomCmd.Name = "ToBottomCmd";
 			this.ToBottomCmd.Size = new System.Drawing.Size(33, 46);
-			this.ToBottomCmd.TabIndex = 14;
+			this.ToBottomCmd.TabIndex = 10;
 			this.ToBottomCmd.Text = "\\/ \\/";
 			this.ToBottomCmd.UseVisualStyleBackColor = true;
 			this.ToBottomCmd.Click += new System.EventHandler(this.ToBottomCmd_Click);
@@ -732,7 +732,7 @@
 			this.DownCmd.Location = new System.Drawing.Point(660, 162);
 			this.DownCmd.Name = "DownCmd";
 			this.DownCmd.Size = new System.Drawing.Size(33, 46);
-			this.DownCmd.TabIndex = 13;
+			this.DownCmd.TabIndex = 9;
 			this.DownCmd.Text = "\\/";
 			this.DownCmd.UseVisualStyleBackColor = true;
 			this.DownCmd.Click += new System.EventHandler(this.DownCmd_Click);
@@ -744,7 +744,7 @@
 			this.UpCmd.Location = new System.Drawing.Point(660, 71);
 			this.UpCmd.Name = "UpCmd";
 			this.UpCmd.Size = new System.Drawing.Size(33, 46);
-			this.UpCmd.TabIndex = 11;
+			this.UpCmd.TabIndex = 7;
 			this.UpCmd.Text = "/\\";
 			this.UpCmd.UseVisualStyleBackColor = true;
 			this.UpCmd.Click += new System.EventHandler(this.UpCmd_Click);
@@ -756,7 +756,7 @@
 			this.ToTopCmd.Location = new System.Drawing.Point(660, 19);
 			this.ToTopCmd.Name = "ToTopCmd";
 			this.ToTopCmd.Size = new System.Drawing.Size(33, 46);
-			this.ToTopCmd.TabIndex = 10;
+			this.ToTopCmd.TabIndex = 6;
 			this.ToTopCmd.Text = "/\\ /\\";
 			this.ToTopCmd.UseVisualStyleBackColor = true;
 			this.ToTopCmd.Click += new System.EventHandler(this.ToTopCmd_Click);
@@ -770,7 +770,7 @@
 			this.PlaylistComb.Name = "PlaylistComb";
 			this.PlaylistComb.Size = new System.Drawing.Size(420, 21);
 			this.PlaylistComb.Sorted = true;
-			this.PlaylistComb.TabIndex = 4;
+			this.PlaylistComb.TabIndex = 1;
 			this.PlaylistComb.SelectedIndexChanged += new System.EventHandler(this.PlaylistComb_SelectedIndexChanged);
 			this.PlaylistComb.Click += new System.EventHandler(this.PlaylistComb_Click);
 			this.PlaylistComb.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.PlaylistComb_KeyPress);
@@ -782,7 +782,7 @@
 			this.AddToPlaylistCmd.Location = new System.Drawing.Point(438, 287);
 			this.AddToPlaylistCmd.Name = "AddToPlaylistCmd";
 			this.AddToPlaylistCmd.Size = new System.Drawing.Size(85, 23);
-			this.AddToPlaylistCmd.TabIndex = 5;
+			this.AddToPlaylistCmd.TabIndex = 2;
 			this.AddToPlaylistCmd.Text = "Add To Playlist";
 			this.AddToPlaylistCmd.UseVisualStyleBackColor = true;
 			this.AddToPlaylistCmd.Click += new System.EventHandler(this.AddToPlaylistCmd_Click);
@@ -794,7 +794,7 @@
 			this.DeletePlaylistCmd.Location = new System.Drawing.Point(529, 287);
 			this.DeletePlaylistCmd.Name = "DeletePlaylistCmd";
 			this.DeletePlaylistCmd.Size = new System.Drawing.Size(85, 23);
-			this.DeletePlaylistCmd.TabIndex = 6;
+			this.DeletePlaylistCmd.TabIndex = 3;
 			this.DeletePlaylistCmd.Text = "Delete Playlist";
 			this.DeletePlaylistCmd.UseVisualStyleBackColor = true;
 			this.DeletePlaylistCmd.Click += new System.EventHandler(this.DeletePlaylistCmd_Click);
@@ -805,7 +805,7 @@
 			this.NewPlaylistCmd.Location = new System.Drawing.Point(620, 287);
 			this.NewPlaylistCmd.Name = "NewPlaylistCmd";
 			this.NewPlaylistCmd.Size = new System.Drawing.Size(85, 23);
-			this.NewPlaylistCmd.TabIndex = 7;
+			this.NewPlaylistCmd.TabIndex = 4;
 			this.NewPlaylistCmd.Text = "New Playlist";
 			this.NewPlaylistCmd.UseVisualStyleBackColor = true;
 			this.NewPlaylistCmd.Click += new System.EventHandler(this.NewPlaylistCmd_Click);
