@@ -13,11 +13,6 @@ using BooBox;
 namespace BooBoxServer {
 	public partial class MainFrm : Form {
 
-		// TODO: Prevent brackets in server names or playlist names.
-		// TODO: Prevent "Local" from being a server name.
-		// TODO: Scrap playcounts being sent to the client.
-
-
 		#region Form Variables
 		private Boolean DisablePlaylistButtonUpdating = false;
 		//private Boolean ConfigLoaded = false;

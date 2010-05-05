@@ -19,6 +19,8 @@ namespace BooBoxServer {
 		private int tempPortTrans = 1338;
 
 		private void UpdateWizard() {
+			InputOneTxt.Text = InputOneTxt.Text.Trim();
+			InputTwoTxt.Text = InputTwoTxt.Text.Trim();
 			InputOneTxt.Visible = false;
 			InputTwoTxt.Visible = false;
 			InputOneTxt.Enabled = true;
@@ -48,6 +50,10 @@ namespace BooBoxServer {
 					CurrentPage--;
 					UpdateWizard();
 					MessageBox.Show("Server name may not be blank. Type a valid server name to continue.");
+				} else if (tempServerName != "Local") {
+					CurrentPage--;
+					UpdateWizard();
+					MessageBox.Show("Server name may not be \"Local\".");
 				} else if (tempServerName.Length > 200) {
 					CurrentPage--;
 					UpdateWizard();

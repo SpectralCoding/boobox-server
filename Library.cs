@@ -151,7 +151,7 @@ namespace BooBoxServer {
 				for (int i = 0; i < tempSI.Genres.Length; i++) { XmlWriter.WriteElementString("genre", tempSI.Genres[i]); }
 				XmlWriter.WriteEndElement();
 				XmlWriter.WriteElementString("md5", tempSI.MD5);
-				XmlWriter.WriteElementString("playcount", tempSI.PlayCount.ToString());
+				//XmlWriter.WriteElementString("playcount", tempSI.PlayCount.ToString());
 				XmlWriter.WriteElementString("playlength", tempSI.PlayLength.ToString());
 				XmlWriter.WriteElementString("startbyte", tempSI.StartByte.ToString());
 				XmlWriter.WriteElementString("title", tempSI.Title);
